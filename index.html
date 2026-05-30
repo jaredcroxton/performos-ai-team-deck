@@ -805,19 +805,62 @@ body {
     <div class="glow-line"></div>
   </div>
 
-  <!-- Slide 2: The Problem -->
+  <!-- Slide 2: The Problem vs The Solution -->
   <div class="slide" id="s2">
     <div class="slide-content">
       <div class="accent-line"></div>
-      <div class="slide-tag">The Problem</div>
-      <h2 class="slide-title">You Would Not Send<br>Your Data to ChatGPT.<br><span class="highlight">So Why Send It<br>to an AI Agent?</span></h2>
-      <ul class="feature-list">
-        <li><span class="feature-bullet"></span>Every cloud AI service reads your data, stores it, and may use it to train their models</li>
-        <li><span class="feature-bullet"></span>Per-seat licensing means you pay more every time you add a team member</li>
-        <li><span class="feature-bullet"></span>Per-token pricing means your bill explodes the moment agents actually get useful work done</li>
-        <li><span class="feature-bullet"></span>You are locked into one provider's ecosystem and their data handling policies</li>
-        <li><span class="feature-bullet"></span>Compliance, legal, and healthcare teams are rightly saying no to cloud AI</li>
-      </ul>
+      <div class="slide-tag">Cloud AI vs PerformOS Local AI</div>
+      <h2 class="slide-title">You Would Not Send<br>Your Data to ChatGPT.<br><span class="highlight">So Why Send It<br>Anywhere Else?</span></h2>
+      <div style="margin-top:20px; width:100%; max-width:860px;">
+        <table style="width:100%; border-collapse:collapse; font-size:13px;">
+          <thead>
+            <tr>
+              <th style="text-align:left; padding:10px 12px; border-bottom:1px solid var(--cream-12); color:var(--cream-40); font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:2px; width:36%;">The Problem</th>
+              <th style="text-align:left; padding:10px 12px; border-bottom:1px solid var(--cream-12); color:var(--cream-40); font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:2px; width:28%;">Cloud AI (OpenAI, Claude, etc.)</th>
+              <th style="text-align:left; padding:10px 12px; border-bottom:1px solid var(--cream-12); color:var(--cream-40); font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:2px; width:36%;">PerformOS Local AI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
+              <td style="padding:12px; color:var(--cream-2);" rowspan="2"><strong>Data Retention</strong><br><span style="font-size:11px; color:var(--cream-40);">Where does your data go?</span></td>
+              <td style="padding:12px; color:#FF5F57; font-size:12px;">Data stored on their servers<br><span style="font-size:11px;">Used for model training in some cases</span></td>
+              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>Zero data retention</strong><br><span style="font-size:11px; color:var(--cream-2);">All processing on your hardware</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
+              <td style="padding:12px; color:#FF5F57; font-size:12px;">Privacy policy applies<br><span style="font-size:11px;">You agree to their terms</span></td>
+              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>You own everything</strong><br><span style="font-size:11px; color:var(--cream-2);">No third-party data sharing</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
+              <td style="padding:12px; color:var(--cream-2);"><strong>Cost Model</strong><br><span style="font-size:11px; color:var(--cream-40);">How are you charged?</span></td>
+              <td style="padding:12px; color:#FF5F57; font-size:12px;">Per-token + per-seat<br><span style="font-size:11px;">Bill grows with every user and every query</span></td>
+              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>Flat monthly fee</strong><br><span style="font-size:11px; color:var(--cream-2);">$4,999/mo, unlimited inference</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
+              <td style="padding:12px; color:var(--cream-2);"><strong>GPT-5.5 API Cost</strong><br><span style="font-size:11px; color:var(--cream-40);">10 agents, heavy use</span></td>
+              <td style="padding:12px; color:#FF5F57; font-size:12px;">~$10,000-$20,000/mo<br><span style="font-size:11px;">At $15/1M tokens input, $60/1M output, 2B tokens/month</span></td>
+              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>$4,999 flat</strong><br><span style="font-size:11px; color:var(--cream-2);">Zero per-token cost ever</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
+              <td style="padding:12px; color:var(--cream-2);"><strong>Claude Opus 4 API Cost</strong><br><span style="font-size:11px; color:var(--cream-40);">10 agents, heavy use</span></td>
+              <td style="padding:12px; color:#FF5F57; font-size:12px;">~$6,000-$12,000/mo<br><span style="font-size:11px;">At $15/1M input, $75/1M output, 2B tokens/month</span></td>
+              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>$4,999 flat</strong><br><span style="font-size:11px; color:var(--cream-2);">Same flat rate regardless</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
+              <td style="padding:12px; color:var(--cream-2);"><strong>Vendor Lock-in</strong><br><span style="font-size:11px; color:var(--cream-40);">Can you switch?</span></td>
+              <td style="padding:12px; color:#FF5F57; font-size:12px;">Tied to one ecosystem<br><span style="font-size:11px;">Data, prompts, configs locked there</span></td>
+              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>Fully portable</strong><br><span style="font-size:11px; color:var(--cream-2);">Runs on commodity hardware</span></td>
+            </tr>
+            <tr>
+              <td style="padding:12px; color:var(--cream-2);"><strong>Compliance</strong><br><span style="font-size:11px; color:var(--cream-40);">Legal, healthcare, finance</span></td>
+              <td style="padding:12px; color:#FF5F57; font-size:12px;">Often a hard no<br><span style="font-size:11px;">Data leaves the building</span></td>
+              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>Compliant by design</strong><br><span style="font-size:11px; color:var(--cream-2);">Nothing leaves your network</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:20px; font-size:12px; color:var(--cream-40); padding:14px 18px; background:var(--ink-2); border:1px solid var(--cream-12); border-radius:8px; max-width:860px; line-height:1.55;">
+        API pricing based on OpenAI GPT-5.5 ($15/1M input, $60/1M output) and Claude Opus 4 ($15/1M input, $75/1M output) as at June 2026. 2 billion tokens per month estimated for 10 agents at medium to heavy use.
+      </div>
     </div>
     <div class="glow-line"></div>
   </div>
@@ -827,19 +870,19 @@ body {
     <div class="slide-content">
       <div class="accent-line"></div>
       <div class="slide-tag">What You Get</div>
-      <h2 class="slide-title"><span class="highlight">10 Specialist AI Agents</span><br>Fully Configured, Ready to Work</h2>
-      <p class="slide-subtitle">Each agent is a pre-built specialist with its own profile, domain expertise, and tool connections. Fully customisable to your workflows. No cloud dependencies.</p>
+      <h2 class="slide-title"><span class="highlight">Up to 10 AI Agents.</span><br>Full Business Coverage.</h2>
+      <p class="slide-subtitle">Every agent is a pre-built specialist covering a critical business function. Talent acquisition, retention, marketing, SEO, growth, compliance, strategy and more. Fully customisable to your workflows during onboarding.</p>
       <div class="agent-row">
         <span class="agent-pill"><span class="agent-emoji">🎯</span> CEO Advisor</span>
         <span class="agent-pill"><span class="agent-emoji">⚖️</span> HR and Compliance</span>
+        <span class="agent-pill"><span class="agent-emoji">🤝</span> Talent Acquisition</span>
+        <span class="agent-pill"><span class="agent-emoji">📉</span> Churn and Acquisition</span>
         <span class="agent-pill"><span class="agent-emoji">📚</span> Learning Designer</span>
         <span class="agent-pill"><span class="agent-emoji">🔧</span> Builder and Deployer</span>
         <span class="agent-pill"><span class="agent-emoji">🔍</span> Research and Synthesis</span>
         <span class="agent-pill"><span class="agent-emoji">📋</span> Chief of Staff</span>
-        <span class="agent-pill"><span class="agent-emoji">🎭</span> Sales Coach</span>
-        <span class="agent-pill"><span class="agent-emoji">📝</span> Legal Advisor</span>
-        <span class="agent-pill"><span class="agent-emoji">🎓</span> Study Partner</span>
-        <span class="agent-pill"><span class="agent-emoji">📈</span> SEO Strategist</span>
+        <span class="agent-pill"><span class="agent-emoji">📣</span> Marketing and SEO</span>
+        <span class="agent-pill"><span class="agent-emoji">🚀</span> Growth Optimiser</span>
       </div>
     </div>
     <div class="glow-line"></div>
@@ -877,16 +920,16 @@ body {
       <h2 class="slide-title">Build and Train<br><span class="highlight">Without the Backlog</span></h2>
       <div class="cards-grid">
         <div class="card">
-          <div class="card-num">03 — Learning Designer</div>
-          <div class="card-icon">📚</div>
-          <div class="card-title">Full Training Programmes in Hours, Not Weeks</div>
-          <div class="card-desc">Bloom's outcomes, module structures, Tell-Show-Do-Check flows, assessments, Kirkpatrick plans, facilitation guides, learner and manager PDF packs. First draft delivered same day.</div>
+          <div class="card-num">03 — Talent Acquisition</div>
+          <div class="card-icon">🤝</div>
+          <div class="card-title">Recruitment Pipelines, No-Show Reduction, Hiring Quality</div>
+          <div class="card-desc">Builds and optimises your recruitment pipeline end to end. Reduces candidate no-shows with automated follow-ups. Improves hiring quality with structured screening. Tracks source effectiveness so you stop wasting spend on channels that do not convert.</div>
         </div>
         <div class="card">
-          <div class="card-num">04 — Builder and Deployer</div>
-          <div class="card-icon">🔧</div>
-          <div class="card-title">Dashboards, Automations, Internal Tools</div>
-          <div class="card-desc">"I wish we had a tool for that" backlog cleared. HTML dashboards from Google Sheets. Onboarding checklists. Process automations. Built and deployed, not just scoped.</div>
+          <div class="card-num">04 — Churn and Acquisition Expert</div>
+          <div class="card-icon">📉</div>
+          <div class="card-title">Retention Analysis, Acquisition Strategy, Revenue Protection</div>
+          <div class="card-desc">Identifies why customers leave before they leave. Builds acquisition strategies based on your best customer profiles. Tracks churn predictors and flags at-risk accounts. Turns retention from reactive to proactive.</div>
         </div>
       </div>
     </div>
@@ -901,16 +944,16 @@ body {
       <h2 class="slide-title">Research and Operations<br><span class="highlight">Never Drown in Documents Again</span></h2>
       <div class="cards-grid">
         <div class="card">
-          <div class="card-num">05 — Research and Synthesis</div>
-          <div class="card-icon">🔍</div>
-          <div class="card-title">Digests Any Document. Synthesises Any Topic.</div>
-          <div class="card-desc">Feed it 15 research papers or a 300-page report. Get structured synthesis with contradictions, gaps, and implications. Connects to NotebookLM for source-grounded analysis.</div>
+          <div class="card-num">05 — Learning Designer</div>
+          <div class="card-icon">📚</div>
+          <div class="card-title">Full Training Programmes in Hours, Not Weeks</div>
+          <div class="card-desc">Onboarding programmes, compliance training, sales enablement, leadership development. Bloom's outcomes, module structures, assessments, Kirkpatrick plans, facilitation guides, learner and manager packs. First draft delivered same day.</div>
         </div>
         <div class="card">
-          <div class="card-num">06 — Chief of Staff</div>
-          <div class="card-icon">📋</div>
-          <div class="card-title">Email Triage, Meeting Prep, Follow-Up Tracking</div>
-          <div class="card-desc">Does 60% of what an executive assistant does. Available 24/7. Remembers everything. Prepares you for every meeting with context from the last three.</div>
+          <div class="card-num">06 — Builder and Deployer</div>
+          <div class="card-icon">🔧</div>
+          <div class="card-title">Dashboards, Automations, Internal Tools</div>
+          <div class="card-desc">"I wish we had a tool for that" backlog cleared. HTML dashboards from your data. Onboarding checklists. Process automations. Internal web apps. Built and deployed, not just scoped and forgotten.</div>
         </div>
       </div>
     </div>
@@ -925,16 +968,16 @@ body {
       <h2 class="slide-title">Sales and Legal<br><span class="highlight">Scale What Humans Cannot</span></h2>
       <div class="cards-grid">
         <div class="card">
-          <div class="card-num">07 — Sales Coach</div>
-          <div class="card-icon">🎭</div>
-          <div class="card-title">AI Roleplay That Actually Feels Real</div>
-          <div class="card-desc">Simulates customer conversations with scored feedback. Progressive difficulty. Before a product launch, after a bad quarter, or for a new hire's first 10 calls. The most effective training method, now scalable.</div>
+          <div class="card-num">07 — Research and Synthesis</div>
+          <div class="card-icon">🔍</div>
+          <div class="card-title">Digests Any Document. Synthesises Any Topic.</div>
+          <div class="card-desc">Feed it 15 research papers or a 300-page report. Get structured synthesis with contradictions, gaps, and market implications. Competitive intelligence, industry reports, regulatory changes. All digested and summarised for decision-making.</div>
         </div>
         <div class="card">
-          <div class="card-num">08 — Legal Advisor</div>
-          <div class="card-icon">📝</div>
-          <div class="card-title">Contract Review, Risk Flagging, IP and Privacy</div>
-          <div class="card-desc">First pass on every contract in minutes, not days. Flags the clauses that need a lawyer. Explains commercial terms in plain language. Does not give legal advice. Flags issues and recommends next steps.</div>
+          <div class="card-num">08 — Chief of Staff</div>
+          <div class="card-icon">📋</div>
+          <div class="card-title">Email Triage, Meeting Prep, Operations, Travel</div>
+          <div class="card-desc">Does 60% of what an executive assistant does. Available 24/7. Remembers everything. Prepares you for every meeting with context from the last three. Manages follow-ups, travel planning, and daily priorities.</div>
         </div>
       </div>
     </div>
@@ -949,16 +992,16 @@ body {
       <h2 class="slide-title">Development and Growth<br><span class="highlight">Always Available</span></h2>
       <div class="cards-grid">
         <div class="card">
-          <div class="card-num">09 — Study Partner</div>
-          <div class="card-icon">🎓</div>
-          <div class="card-title">MBA, Certifications, Professional Development</div>
-          <div class="card-desc">Course notes, assignment structuring, rubric analysis, study planning. Companies that invest in L&D want people to finish. A study partner that is always available dramatically improves completion rates.</div>
+          <div class="card-num">09 — Marketing and SEO Strategist</div>
+          <div class="card-icon">📣</div>
+          <div class="card-title">SEO, Content Strategy, AI-Powered Website Optimisation</div>
+          <div class="card-desc">Keyword research, content planning, technical SEO audits, blog and landing page drafts. Also handles AI-powered website improvements, ChatGPT-style optimisation for your web presence, and marketing campaign planning across channels.</div>
         </div>
         <div class="card">
-          <div class="card-num">10 — SEO Strategist</div>
-          <div class="card-icon">📈</div>
-          <div class="card-title">Keyword Research, Content Plans, Audits, Drafts</div>
-          <div class="card-desc">Ongoing SEO work that normally costs $3,000 to $5,000/month in freelancer fees. Audits, briefs, and drafts done. You only pay a human for strategy and final review.</div>
+          <div class="card-num">10 — Growth Optimiser</div>
+          <div class="card-icon">🚀</div>
+          <div class="card-title">New Agents, Ongoing Optimisation, Performance Analytics</div>
+          <div class="card-desc">Monitors agent performance across your team. Identifies where new agents could add value. Runs A/B tests on agent configurations. Delivers monthly recommendations. Your dedicated growth agent that makes your AI team better over time.</div>
         </div>
       </div>
     </div>
@@ -971,17 +1014,19 @@ body {
       <div class="accent-line"></div>
       <div class="slide-tag">Two Tiers, Same 10 Agents</div>
       <h2 class="slide-title"><span class="highlight">Standard</span> or <span class="highlight-cyan">Advanced</span><br>Pick Your Depth</h2>
-      <p class="slide-subtitle">Both tiers give you the same 10 customisable AI agents with the same tool connections and the same zero data retention. The difference is the brain behind each agent.</p>
+      <p class="slide-subtitle">Both tiers give you the same 10 customisable AI agents. Same tool connections. Same zero data retention. The difference is the model size and capability behind each agent.</p>
       <div class="cards-grid" style="max-width:900px; gap:20px;">
         <div class="card" style="border-color:rgba(59,130,246,0.25);">
           <div class="card-num" style="color:var(--blue);">Standard</div>
-          <div class="card-title" style="font-size:18px; margin-bottom:12px;">Fast, Efficient, High Volume</div>
+          <div class="card-title" style="font-size:18px; margin-bottom:4px;">Fast, Efficient, High Volume</div>
+          <div style="font-size:11px; font-family:var(--font-mono); color:var(--blue); margin-bottom:10px;">8B parameter models</div>
           <div class="card-desc" style="line-height:1.65;">
-            Built for speed and volume. These models handle high-volume, everyday business tasks with precision. Quick responses, lower compute footprint, and purpose-built for getting consistent work done across all 10 agents simultaneously.<br><br>
+            The "B" stands for billion parameters, which is the number of connections the model learned during training. 8 billion is a lot. These models handle everyday business tasks with speed and precision across all 10 agents at the same time.<br><br>
+            Think of it like this: 8B models are highly competent generalists. They write well, analyse data, coach teams, review contracts, and research topics. They do all of it fast and they do it for all 10 agents simultaneously.<br><br>
             <strong style="color:var(--cream-2);">Best fit when your priority is:</strong><br>
             • Processing volume across all agents<br>
             • Speed on routine and repeatable tasks<br>
-            • Cost-efficient hardware footprint<br>
+            • Cost-efficient hardware (24GB RAM)<br>
             <br>
             <strong style="color:var(--cream-2);">Same compliance as Advanced:</strong><br>
             • Zero data retention ✓<br>
@@ -991,14 +1036,12 @@ body {
         </div>
         <div class="card" style="border-color:rgba(139,92,246,0.25);">
           <div class="card-num" style="color:var(--violet);">Advanced</div>
-          <div class="card-title" style="font-size:18px; margin-bottom:12px;">Deep, Powerful, Complex Reasoning</div>
+          <div class="card-title" style="font-size:18px; margin-bottom:4px;">Deep, Powerful, Complex Reasoning</div>
+          <div style="font-size:11px; font-family:var(--font-mono); color:var(--violet); margin-bottom:10px;">14B to 70B parameter models</div>
           <div class="card-desc" style="line-height:1.65;">
-            Built for complexity. These models have significantly more processing capacity, which means stronger reasoning, deeper analysis, and meaningfully better performance on ambiguous or high-stakes tasks. Same 10 agents, same speed on everyday work, but goes deeper when the task demands it.<br><br>
-            <strong style="color:var(--cream-2);">Best fit when your priority is:</strong><br>
-            • Complex problem-solving and strategic reasoning<br>
-            • Tasks requiring deep context and subtle interpretation<br>
-            • Higher accuracy on ambiguous or high-stakes decisions<br>
-            <br>
+            Same as Standard but with significantly more processing capacity. A 70B model has nearly 9 times more learned connections than an 8B model. That translates to stronger reasoning, deeper analysis, and meaningfully better performance on ambiguous or high-stakes tasks.<br><br>
+            Think of it like this: if 8B models are senior employees, 14B to 70B models are the partners. They handle everything the 8B models do, but they go deeper. Better at complex strategy, nuanced judgement, and work where getting it right matters more than getting it fast.<br><br>
+            <strong style="color:var(--cream-2);">Hardware note:</strong> Advanced models need more memory during setup. We provision 48GB RAM during your onboarding to accommodate the larger model sizes. This is handled as part of the setup fee.<br><br>
             <strong style="color:var(--cream-2);">Same compliance as Standard:</strong><br>
             • Zero data retention ✓<br>
             • Full data compliance ✓<br>
@@ -1019,7 +1062,7 @@ body {
       <div class="accent-line"></div>
       <div class="slide-tag">Pricing</div>
       <h2 class="slide-title">Same Monthly. <span class="highlight">Different Setup.</span></h2>
-      <p class="slide-subtitle">$4,999 AUD/month for either tier. No per-token charges. No per-seat licensing. No surprise bills. One flat monthly fee for your entire AI team. 12-month minimum.</p>
+      <p class="slide-subtitle">$4,999 AUD/month for either tier. No per-token charges. No per-seat licensing. No surprise bills. One flat monthly fee for your entire AI team. 6-month minimum.</p>
       <div class="cards-grid" style="max-width:900px; gap:20px; margin-top:20px;">
         <div class="card" style="border-color:rgba(59,130,246,0.25); text-align:center; padding:28px 24px;">
           <div class="card-num" style="text-align:center; color:var(--blue);">Standard</div>
@@ -1043,7 +1086,7 @@ body {
         </div>
       </div>
       <div style="margin-top:16px; font-size:12px; color:var(--cream-40); padding:14px 18px; background:var(--ink-2); border:1px solid var(--cream-12); border-radius:8px; max-width:900px; line-height:1.55; text-align:center;">
-        Monthly retainer for either tier: <strong style="color:var(--cream);">$4,999 AUD/month</strong> · Setup includes 10 hours remote onboarding, agent configuration, integration, team training and go-live support · 12-month minimum
+        Monthly retainer for either tier: <strong style="color:var(--cream);">$4,999 AUD/month</strong> · Setup includes 10 hours remote onboarding, agent configuration, integration, team training and go-live support · 6-month minimum
       </div>
     </div>
     <div class="glow-line"></div>
