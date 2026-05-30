@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PerformOS AI Team — Your Private AI Team, Running Locally</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 :root {
   --ink: #0A0A0A;
   --ink-2: #111111;
@@ -18,36 +17,34 @@
   --cream-12: rgba(240,240,245,0.12);
   --blue: #3B82F6;
   --blue-soft: #60A5FA;
+  --blue-25: rgba(59,130,246,0.25);
+  --blue-30: rgba(59,130,246,0.30);
   --violet: #8B5CF6;
+  --violet-25: rgba(139,92,246,0.25);
   --cyan: #22D3EE;
+  --coral: #FF5F57;
+  --row-rule: rgba(240,240,245,0.06);
   --font-display: Archivo, Calibri, Arial, sans-serif;
   --font-body: Calibri, Inter, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Reset */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 .sr-only {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
 }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-  background: var(--ink);
-}
-
+html, body { height: 100%; overflow: hidden; background: var(--ink); }
 body {
   color: var(--cream);
   font-family: var(--font-body);
@@ -82,58 +79,34 @@ body {
   background: transparent;
   transform-origin: center top;
 }
-
 .slide.active {
   opacity: 1;
   visibility: visible;
   transform: perspective(1200px) translateY(0) rotateX(0deg) scale(1);
 }
-
 .slide.exit-up {
   transform: perspective(1200px) translateY(-40px) rotateX(-4deg) scale(0.98);
   opacity: 0;
 }
+.slide-content { max-width: 960px; width: 100%; }
+.slide > * { position: relative; z-index: 1; }
 
-.slide-content {
-  max-width: 960px;
-  width: 100%;
+/* Background layers */
+.particle-canvas, .bg-grid, .bg-orbs {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
 }
-
-/* Particle canvas */
-.particle-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Animated background grid */
 .bg-grid {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
   background-image:
     linear-gradient(rgba(240,240,245,0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(240,240,245,0.03) 1px, transparent 1px);
   background-size: 60px 60px;
   animation: gridDrift 20s linear infinite;
 }
-
 @keyframes gridDrift {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(60px, 60px); }
+  from { transform: translate(0, 0); }
+  to   { transform: translate(60px, 60px); }
 }
-
-/* Floating orbs */
-.bg-orbs {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
+.bg-orbs { overflow: hidden; }
 .orb {
   position: absolute;
   border-radius: 50%;
@@ -141,41 +114,29 @@ body {
   opacity: 0.15;
   animation: orbFloat 12s ease-in-out infinite alternate;
 }
-
-.orb-1 {
-  width: 400px; height: 400px;
-  background: var(--blue);
-  top: -10%; left: -5%;
-  animation-duration: 14s;
-}
-
-.orb-2 {
-  width: 300px; height: 300px;
-  background: var(--violet);
-  bottom: -10%; right: -5%;
-  animation-duration: 18s;
-  animation-delay: -4s;
-}
-
-.orb-3 {
-  width: 200px; height: 200px;
-  background: var(--cyan);
-  top: 40%; right: 20%;
-  animation-duration: 16s;
-  animation-delay: -8s;
-  opacity: 0.08;
-}
-
+.orb-1 { width: 400px; height: 400px; background: var(--blue);   top: -10%;   left: -5%;  animation-duration: 14s; }
+.orb-2 { width: 300px; height: 300px; background: var(--violet); bottom: -10%; right: -5%; animation-duration: 18s; animation-delay: -4s; }
+.orb-3 { width: 200px; height: 200px; background: var(--cyan);   top: 40%;    right: 20%; animation-duration: 16s; animation-delay: -8s; opacity: 0.08; }
 @keyframes orbFloat {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(30px, -20px) scale(1.05); }
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(30px, -20px) scale(1.05); }
   100% { transform: translate(-20px, 15px) scale(0.95); }
 }
 
-/* Slide content sits above bg */
-.slide > * { position: relative; z-index: 1; }
+/* Generic stagger: any container assigns --i to its children via :nth-child,
+   and per-component rules set --base + --step to drive the entrance delay. */
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(1)  { --i: 0; }
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(2)  { --i: 1; }
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(3)  { --i: 2; }
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(4)  { --i: 3; }
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(5)  { --i: 4; }
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(6)  { --i: 5; }
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(7)  { --i: 6; }
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(8)  { --i: 7; }
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(9)  { --i: 8; }
+:where(.cards-grid, .agent-row, .feature-list, .tag-cloud, .stats-row) > :nth-child(10) { --i: 9; }
 
-/* Tag */
+/* Slide tag */
 .slide-tag {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -188,11 +149,7 @@ body {
   transform: translateY(12px);
   transition: opacity 0.5s var(--ease) 0.2s, transform 0.5s var(--ease) 0.2s;
 }
-
-.slide.active .slide-tag {
-  opacity: 1;
-  transform: translateY(0);
-}
+.slide.active .slide-tag { opacity: 1; transform: translateY(0); }
 
 /* Title */
 .slide-title {
@@ -207,25 +164,15 @@ body {
   transform: translateY(24px) scale(0.97);
   transition: opacity 0.65s var(--ease-spring) 0.35s, transform 0.65s var(--ease-spring) 0.35s;
 }
-
-.slide.active .slide-title {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.slide-title .highlight {
-  background: linear-gradient(135deg, var(--blue), var(--violet));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
+.slide.active .slide-title { opacity: 1; transform: translateY(0) scale(1); }
+.slide-title .highlight,
 .slide-title .highlight-cyan {
-  background: linear-gradient(135deg, var(--cyan), var(--blue));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.slide-title .highlight      { background-image: linear-gradient(135deg, var(--blue), var(--violet)); }
+.slide-title .highlight-cyan { background-image: linear-gradient(135deg, var(--cyan), var(--blue)); }
 
 /* Subtitle */
 .slide-subtitle {
@@ -238,32 +185,11 @@ body {
   transform: translateY(12px);
   transition: opacity 0.5s var(--ease) 0.5s, transform 0.5s var(--ease) 0.5s;
 }
-
-.slide.active .slide-subtitle {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Body */
-.slide-body {
-  font-size: 15px;
-  color: var(--cream-40);
-  max-width: 680px;
-  line-height: 1.6;
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.5s var(--ease) 0.6s, transform 0.5s var(--ease) 0.6s;
-}
-
-.slide.active .slide-body {
-  opacity: 1;
-  transform: translateY(0);
-}
+.slide.active .slide-subtitle { opacity: 1; transform: translateY(0); }
 
 /* Accent line */
 .accent-line {
-  width: 48px;
-  height: 3px;
+  width: 48px; height: 3px;
   background: linear-gradient(90deg, var(--blue), var(--violet));
   border-radius: 2px;
   margin-bottom: 24px;
@@ -272,11 +198,18 @@ body {
   transform-origin: left;
   transition: opacity 0.4s var(--ease) 0.15s, transform 0.6s var(--ease) 0.15s;
 }
+.slide.active .accent-line { opacity: 1; transform: scaleX(1); }
 
-.slide.active .accent-line {
-  opacity: 1;
-  transform: scaleX(1);
+/* Glow line at slide bottom */
+.glow-line {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blue), var(--violet), transparent);
+  opacity: 0;
+  transition: opacity 0.6s var(--ease) 0.4s;
 }
+.slide.active .glow-line { opacity: 0.5; }
 
 /* Cards */
 .cards-grid {
@@ -287,18 +220,23 @@ body {
   width: 100%;
   max-width: 860px;
 }
+.cards-grid.wide { max-width: 900px; gap: 20px; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
 
 .card {
+  --base: 0.5s; --step: 0.12s; --i: 0;
   background: var(--ink-2);
   border: 1px solid var(--cream-12);
   border-radius: 10px;
   padding: 22px;
-  transition: transform 0.35s var(--ease-spring), border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring);
+  position: relative;
   opacity: 0;
   transform: translateY(30px) scale(0.97);
-  position: relative;
+  transition-property: opacity, transform, border-color, background, box-shadow;
+  transition-duration: 0.55s, 0.55s, 0.3s, 0.3s, 0.35s;
+  transition-timing-function: var(--ease-spring), var(--ease-spring), var(--ease), var(--ease), var(--ease-spring);
 }
-
 .card::before {
   content: '';
   position: absolute;
@@ -311,36 +249,24 @@ body {
   animation: cardBorderSpin 4s linear infinite;
   animation-play-state: paused;
 }
-
-.slide.active .card:hover::before {
-  animation-play-state: running;
-}
-
-@keyframes cardBorderSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+@keyframes cardBorderSpin { to { transform: rotate(360deg); } }
 
 .slide.active .card {
   opacity: 1;
   transform: translateY(0) scale(1);
+  transition-delay:
+    calc(var(--base) + var(--i) * var(--step)),
+    calc(var(--base) + var(--i) * var(--step)),
+    0s, 0s, 0s;
 }
-
-.slide.active .card:nth-child(1) { transition: opacity 0.55s var(--ease-spring) 0.5s, transform 0.55s var(--ease-spring) 0.5s, border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring); }
-.slide.active .card:nth-child(2) { transition: opacity 0.55s var(--ease-spring) 0.62s, transform 0.55s var(--ease-spring) 0.62s, border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring); }
-.slide.active .card:nth-child(3) { transition: opacity 0.55s var(--ease-spring) 0.74s, transform 0.55s var(--ease-spring) 0.74s, border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring); }
-.slide.active .card:nth-child(4) { transition: opacity 0.55s var(--ease-spring) 0.86s, transform 0.55s var(--ease-spring) 0.86s, border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring); }
-
 .card:hover {
   border-color: transparent;
   background: var(--ink-3);
   box-shadow: 0 8px 32px rgba(59,130,246,0.12), 0 0 0 1px rgba(59,130,246,0.1);
   transform: translateY(-2px) scale(1.01);
 }
-
-.card:hover::before {
-  opacity: 0.6;
-}
+.card:hover::before { opacity: 0.6; }
+.slide.active .card:hover::before { animation-play-state: running; }
 
 .card-num {
   font-family: var(--font-mono);
@@ -351,12 +277,7 @@ body {
   font-weight: 500;
   margin-bottom: 10px;
 }
-
-.card-icon {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
+.card-icon { font-size: 24px; margin-bottom: 10px; }
 .card-title {
   font-family: var(--font-display);
   font-size: 16px;
@@ -365,24 +286,76 @@ body {
   margin-bottom: 8px;
   line-height: 1.25;
 }
+.card-desc { font-size: 13px; color: var(--cream-40); line-height: 1.5; }
 
-.card-desc {
-  font-size: 13px;
-  color: var(--cream-40);
-  line-height: 1.5;
+/* Card variant: process step */
+.card.step { text-align: center; padding: 18px 14px; }
+.card.step .card-num, .card.step .card-title { text-align: center; }
+.card.step .step-icon { font-size: 22px; margin: 6px 0; }
+.card.step .card-title { font-size: 13px; }
+.card.step .card-desc  { font-size: 11px; }
+
+/* Card variant: tier (slide 9) */
+.card.tier .card-num     { margin-bottom: 4px; }
+.card.tier .tier-headline {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 4px;
+  line-height: 1.25;
 }
+.card.tier .tier-models {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  margin-bottom: 10px;
+}
+.card.tier .tier-body { font-size: 13px; color: var(--cream-40); line-height: 1.65; }
+.card.tier .tier-body strong { color: var(--cream-2); }
 
-/* Grid 3 */
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-4 { grid-template-columns: repeat(4, 1fr); }
+/* Card variant: price (slide 10) */
+.card.price { text-align: center; padding: 28px 24px; }
+.card.price .card-num { text-align: center; }
+.card.price .price-headline {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--cream);
+  margin: 10px 0 6px;
+}
+.card.price .price-blurb { font-size: 13px; color: var(--cream-40); margin-bottom: 18px; }
+.card.price .price-divider { border-top: 1px solid var(--cream-12); padding-top: 16px; }
+.card.price .price-cap {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--cream-40);
+  margin-bottom: 6px;
+}
+.card.price .price-amount {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--cream);
+}
+.card.price .price-note { font-size: 11px; color: var(--cream-40); margin-top: 4px; }
+
+/* Brand tints for tier/price variants */
+.card.standard { border-color: var(--blue-25); }
+.card.advanced { border-color: var(--violet-25); }
+.card.standard .card-num                       { color: var(--blue); }
+.card.advanced .card-num                       { color: var(--violet); }
+.card.tier.standard .tier-models               { color: var(--blue); }
+.card.tier.advanced .tier-models               { color: var(--violet); }
 
 /* Feature list */
 .feature-list {
+  --base: 0.5s; --step: 0.1s;
   list-style: none;
   margin-top: 16px;
   max-width: 700px;
 }
-
 .feature-list li {
   display: flex;
   align-items: flex-start;
@@ -393,29 +366,17 @@ body {
   color: var(--cream-2);
   opacity: 0;
   transform: translateX(-20px);
+  transition: opacity 0.45s var(--ease-spring), transform 0.45s var(--ease-spring);
 }
-
-.feature-list li:nth-child(even) {
-  transform: translateX(20px);
-}
-
+.feature-list li:nth-child(even) { transform: translateX(20px); }
+.feature-list li:last-child { border-bottom: none; }
 .slide.active .feature-list li {
   opacity: 1;
   transform: translateX(0);
+  transition-delay: calc(var(--base) + var(--i) * var(--step));
 }
-
-.slide.active .feature-list li:nth-child(1) { transition: opacity 0.45s var(--ease-spring) 0.5s, transform 0.45s var(--ease-spring) 0.5s; }
-.slide.active .feature-list li:nth-child(2) { transition: opacity 0.45s var(--ease-spring) 0.6s, transform 0.45s var(--ease-spring) 0.6s; }
-.slide.active .feature-list li:nth-child(3) { transition: opacity 0.45s var(--ease-spring) 0.7s, transform 0.45s var(--ease-spring) 0.7s; }
-.slide.active .feature-list li:nth-child(4) { transition: opacity 0.45s var(--ease-spring) 0.8s, transform 0.45s var(--ease-spring) 0.8s; }
-.slide.active .feature-list li:nth-child(5) { transition: opacity 0.45s var(--ease-spring) 0.9s, transform 0.45s var(--ease-spring) 0.9s; }
-.slide.active .feature-list li:nth-child(6) { transition: opacity 0.45s var(--ease-spring) 1.0s, transform 0.45s var(--ease-spring) 1.0s; }
-
-.feature-list li:last-child { border-bottom: none; }
-
 .feature-bullet {
-  width: 6px;
-  height: 6px;
+  width: 6px; height: 6px;
   border-radius: 50%;
   background: var(--blue);
   flex-shrink: 0;
@@ -425,30 +386,23 @@ body {
 
 /* Stats row */
 .stats-row {
+  --base: 0.5s; --step: 0.1s;
   display: flex;
   gap: 36px;
   margin-top: 28px;
   max-width: 720px;
   flex-wrap: wrap;
 }
-
 .stat {
-  text-align: left;
   opacity: 0;
   transform: translateY(16px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
 }
-
 .slide.active .stat {
   opacity: 1;
   transform: translateY(0);
+  transition-delay: calc(var(--base) + var(--i) * var(--step));
 }
-
-.slide.active .stat:nth-child(1) { transition: opacity 0.5s var(--ease) 0.5s, transform 0.5s var(--ease) 0.5s; }
-.slide.active .stat:nth-child(2) { transition: opacity 0.5s var(--ease) 0.6s, transform 0.5s var(--ease) 0.6s; }
-.slide.active .stat:nth-child(3) { transition: opacity 0.5s var(--ease) 0.7s, transform 0.5s var(--ease) 0.7s; }
-.slide.active .stat:nth-child(4) { transition: opacity 0.5s var(--ease) 0.8s, transform 0.5s var(--ease) 0.8s; }
-.slide.active .stat:nth-child(5) { transition: opacity 0.5s var(--ease) 0.9s, transform 0.5s var(--ease) 0.9s; }
-
 .stat-val {
   font-family: var(--font-display);
   font-size: clamp(26px, 3.5vw, 40px);
@@ -459,7 +413,7 @@ body {
   background-clip: text;
   line-height: 1;
 }
-
+.stat-val.is-text { font-size: clamp(18px, 2.5vw, 28px); }
 .stat-label {
   font-family: var(--font-mono);
   font-size: 9px;
@@ -471,13 +425,13 @@ body {
 
 /* Agent pills */
 .agent-row {
+  --base: 0.45s; --step: 0.05s;
   display: flex;
   gap: 10px;
   margin-top: 24px;
   max-width: 900px;
   flex-wrap: wrap;
 }
-
 .agent-pill {
   display: flex;
   align-items: center;
@@ -485,161 +439,189 @@ body {
   padding: 9px 16px;
   background: var(--ink-2);
   border: 1px solid var(--cream-12);
-  border-radius: 20px;
+  border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
   color: var(--cream-2);
-  transition: all 0.25s var(--ease);
   opacity: 0;
   transform: translateY(10px);
+  transition-property: opacity, transform, border-color, background;
+  transition-duration: 0.4s, 0.4s, 0.25s, 0.25s;
+  transition-timing-function: var(--ease-spring), var(--ease-spring), var(--ease), var(--ease);
 }
-
 .slide.active .agent-pill {
   opacity: 1;
   transform: translateY(0);
+  transition-delay:
+    calc(var(--base) + var(--i) * var(--step)),
+    calc(var(--base) + var(--i) * var(--step)),
+    0s, 0s;
 }
-
-.slide.active .agent-pill:nth-child(1) { transition: opacity 0.4s var(--ease-spring) 0.45s, transform 0.4s var(--ease-spring) 0.45s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(2) { transition: opacity 0.4s var(--ease-spring) 0.50s, transform 0.4s var(--ease-spring) 0.50s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(3) { transition: opacity 0.4s var(--ease-spring) 0.55s, transform 0.4s var(--ease-spring) 0.55s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(4) { transition: opacity 0.4s var(--ease-spring) 0.60s, transform 0.4s var(--ease-spring) 0.60s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(5) { transition: opacity 0.4s var(--ease-spring) 0.65s, transform 0.4s var(--ease-spring) 0.65s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(6) { transition: opacity 0.4s var(--ease-spring) 0.70s, transform 0.4s var(--ease-spring) 0.70s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(7) { transition: opacity 0.4s var(--ease-spring) 0.75s, transform 0.4s var(--ease-spring) 0.75s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(8) { transition: opacity 0.4s var(--ease-spring) 0.80s, transform 0.4s var(--ease-spring) 0.80s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(9) { transition: opacity 0.4s var(--ease-spring) 0.85s, transform 0.4s var(--ease-spring) 0.85s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(10) { transition: opacity 0.4s var(--ease-spring) 0.90s, transform 0.4s var(--ease-spring) 0.90s, border-color 0.25s, background 0.25s; }
-
-.agent-pill:hover {
-  border-color: rgba(59,130,246,0.3);
-  background: var(--ink-3);
-}
-
+.agent-pill:hover { border-color: var(--blue-30); background: var(--ink-3); }
 .agent-emoji { font-size: 14px; }
 
 /* Tag cloud */
 .tag-cloud {
+  --base: 0.45s; --step: 0.05s;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 20px;
   max-width: 800px;
 }
-
 .tag {
   font-family: var(--font-mono);
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   padding: 6px 14px;
-  border-radius: 16px;
+  border-radius: 999px;
   background: var(--ink-2);
   border: 1px solid var(--cream-12);
   color: var(--cream-40);
-  transition: all 0.25s var(--ease);
   opacity: 0;
   transform: translateY(8px);
+  transition-property: opacity, transform, border-color, color;
+  transition-duration: 0.35s, 0.35s, 0.25s, 0.25s;
+  transition-timing-function: var(--ease), var(--ease), var(--ease), var(--ease);
 }
-
 .slide.active .tag {
   opacity: 1;
   transform: translateY(0);
+  transition-delay:
+    calc(var(--base) + var(--i) * var(--step)),
+    calc(var(--base) + var(--i) * var(--step)),
+    0s, 0s;
+}
+.tag:hover { border-color: var(--blue-30); color: var(--cream); }
+
+/* Comparison table (slide 2) */
+.cmp-wrap { width: 100%; max-width: 860px; margin-top: 20px; }
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.cmp-table th {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--cream-12);
+  color: var(--cream-40);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+.cmp-table th:first-child       { width: 36%; }
+.cmp-table th:nth-child(2)      { width: 28%; }
+.cmp-table th:last-child        { width: 36%; }
+.cmp-table td {
+  padding: 12px;
+  font-size: 12px;
+  vertical-align: top;
+}
+.cmp-table tbody tr      { border-bottom: 1px solid var(--row-rule); }
+.cmp-table tbody tr:last-child { border-bottom: none; }
+.cmp-table .label       { color: var(--cream-2); }
+.cmp-table .bad         { color: var(--coral); }
+.cmp-table .good        { color: var(--cyan); }
+.cmp-table .sub         { display: block; font-size: 11px; }
+.cmp-table .label .sub  { color: var(--cream-40); }
+.cmp-table .good .sub   { color: var(--cream-2); }
+
+/* Callout (info block under tables/grids) */
+.callout {
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: var(--ink-2);
+  border: 1px solid var(--cream-12);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--cream-40);
+  line-height: 1.55;
+  max-width: 900px;
+}
+.callout.tight { font-size: 13px; margin-top: 20px; max-width: 900px; }
+.callout.center { text-align: center; }
+.callout strong { color: var(--cream); }
+.callout strong.accent { color: var(--cream-2); }
+
+/* Closing quote (slide 12) and footer tag (slide 14) */
+.closing-quote {
+  margin-top: 28px;
+  font-style: italic;
+  color: var(--cream-40);
+  max-width: 560px;
+  font-size: 14px;
+}
+.footer-tag {
+  margin-top: 36px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--cream-40);
 }
 
-.slide.active .tag:nth-child(1) { transition: opacity 0.35s var(--ease) 0.45s, transform 0.35s var(--ease) 0.45s, border-color 0.25s; }
-.slide.active .tag:nth-child(2) { transition: opacity 0.35s var(--ease) 0.50s, transform 0.35s var(--ease) 0.50s, border-color 0.25s; }
-.slide.active .tag:nth-child(3) { transition: opacity 0.35s var(--ease) 0.55s, transform 0.35s var(--ease) 0.55s, border-color 0.25s; }
-.slide.active .tag:nth-child(4) { transition: opacity 0.35s var(--ease) 0.60s, transform 0.35s var(--ease) 0.60s, border-color 0.25s; }
-
-.tag:hover {
-  border-color: rgba(59,130,246,0.3);
-  color: var(--cream);
-}
-
-/* CTA */
-.cta-block {
-  display: flex;
-  gap: 14px;
-  margin-top: 32px;
-}
-
-.btn-primary {
+/* CTA buttons - pill (Performlytics brand) */
+.cta-block { display: flex; gap: 14px; margin-top: 32px; }
+.btn-primary, .btn-secondary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 14px 28px;
-  background: var(--blue);
-  color: #FFFFFF;
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 600;
-  border: none;
-  border-radius: 10px;
+  border-radius: 999px;
   cursor: pointer;
   transition: all 0.25s var(--ease);
   text-decoration: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
-
+.btn-primary {
+  background: var(--blue);
+  color: #FFFFFF;
+  border: none;
+}
 .btn-primary:hover {
   background: var(--blue-soft);
   transform: translateY(-1px);
   box-shadow: 0 8px 32px rgba(59,130,246,0.25);
 }
-
 .btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 28px;
   background: transparent;
   color: var(--cream-2);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 600;
   border: 1px solid var(--cream-12);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.25s var(--ease);
-  text-decoration: none;
 }
-
 .btn-secondary:hover {
-  border-color: rgba(59,130,246,0.3);
+  border-color: var(--blue-30);
   color: var(--cream);
   background: var(--ink-2);
 }
 
-/* Title slide centering */
-.slide-title-slide {
-  text-align: center;
-  align-items: center;
-}
-
-.slide-title-slide .slide-title,
-.slide-title-slide .slide-subtitle,
-.slide-title-slide .accent-line,
-.slide-title-slide .tag-cloud {
+/* Centered slide variant (title slide, customiser slide, CTA slide) */
+.is-centered { text-align: center; align-items: center; }
+.is-centered .slide-tag,
+.is-centered .slide-title,
+.is-centered .slide-subtitle,
+.is-centered .accent-line {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
 }
+.is-centered .tag-cloud,
+.is-centered .stats-row,
+.is-centered .cta-block,
+.is-centered .agent-row { justify-content: center; }
+.is-centered .stat { text-align: center; }
 
-.slide-title-slide .slide-subtitle {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Count-up animation */
-.count-up {
-  display: inline;
-}
-
-/* Navigation */
+/* Navigation bar */
 .nav-bar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   z-index: 100;
   display: flex;
   align-items: center;
@@ -650,16 +632,6 @@ body {
   backdrop-filter: blur(16px);
   border-top: 1px solid var(--cream-12);
 }
-
-/* Focus styles */
-.nav-btn:focus-visible,
-.btn-primary:focus-visible,
-.btn-secondary:focus-visible,
-.dot:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 3px;
-}
-
 .nav-brand {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -668,16 +640,9 @@ body {
   color: var(--blue);
   font-weight: 500;
 }
-
-.nav-center {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
+.nav-center { display: flex; align-items: center; gap: 10px; }
 .nav-btn {
-  width: 38px;
-  height: 38px;
+  width: 38px; height: 38px;
   border: 1px solid var(--cream-12);
   border-radius: 50%;
   background: var(--ink-2);
@@ -689,24 +654,11 @@ body {
   justify-content: center;
   transition: all 0.2s var(--ease);
 }
-
-.nav-btn:hover {
-  border-color: var(--blue);
-  color: var(--cream);
-  background: var(--ink-3);
-}
-
+.nav-btn:hover { border-color: var(--blue); color: var(--cream); background: var(--ink-3); }
 .nav-btn:active { transform: scale(0.92); }
-
-.dots {
-  display: flex;
-  gap: 5px;
-  margin: 0 6px;
-}
-
+.dots { display: flex; gap: 5px; margin: 0 6px; }
 .dot {
-  width: 7px;
-  height: 7px;
+  width: 7px; height: 7px;
   border-radius: 50%;
   background: var(--cream-12);
   transition: all 0.35s var(--ease);
@@ -714,7 +666,6 @@ body {
   border: none;
   padding: 0;
 }
-
 .dot.active {
   background: var(--blue);
   width: 22px;
@@ -722,12 +673,10 @@ body {
   box-shadow: 0 0 8px rgba(59,130,246,0.4);
   animation: dotPulse 1.8s ease-in-out infinite;
 }
-
 @keyframes dotPulse {
   0%, 100% { box-shadow: 0 0 8px rgba(59,130,246,0.4); }
-  50% { box-shadow: 0 0 16px rgba(59,130,246,0.7), 0 0 4px rgba(59,130,246,0.3); }
+  50%      { box-shadow: 0 0 16px rgba(59,130,246,0.7), 0 0 4px rgba(59,130,246,0.3); }
 }
-
 .counter {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -736,27 +685,60 @@ body {
   text-align: right;
 }
 
+/* Focus rings */
+.nav-btn:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.dot:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* Brand logo (Performlytics × PerformOS) */
+.brand-logo {
+  position: fixed;
+  top: 24px; right: 28px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+.brand-mark { width: 22px; height: 22px; flex-shrink: 0; }
+.brand-wordmark {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--cream-40);
+  font-weight: 500;
+}
+.brand-x { color: var(--blue); margin: 0 2px; }
+
+/* Scrollbar */
+.slide::-webkit-scrollbar       { width: 4px; }
+.slide::-webkit-scrollbar-track { background: transparent; }
+.slide::-webkit-scrollbar-thumb { background: var(--cream-12); border-radius: 2px; }
+
 /* Responsive */
 @media (max-width: 768px) {
   .slide { padding: 56px 28px; }
   .cards-grid { grid-template-columns: 1fr; }
-  .grid-3 { grid-template-columns: 1fr 1fr; }
-  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
   .nav-bar { padding: 10px 14px; }
   .stats-row { gap: 20px; }
   .agent-row { gap: 6px; }
   .agent-pill { padding: 7px 12px; font-size: 11px; }
+  .brand-logo { top: 14px; right: 14px; }
+  .brand-wordmark { display: none; }
+  .cmp-table th, .cmp-table td { padding: 8px; }
+  .cmp-table { font-size: 12px; }
+  .cmp-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
-
 @media (max-width: 480px) {
   .grid-3, .grid-4 { grid-template-columns: 1fr; }
   .stats-row { flex-direction: column; gap: 16px; }
 }
-
-/* Scrollbar */
-.slide::-webkit-scrollbar { width: 4px; }
-.slide::-webkit-scrollbar-track { background: transparent; }
-.slide::-webkit-scrollbar-thumb { background: var(--cream-12); border-radius: 2px; }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
@@ -764,75 +746,16 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
   }
-  .slide,
-  .slide.active,
-  .slide.exit-up {
-    transform: none !important;
-  }
-  .bg-grid,
-  .orb,
-  .particle-canvas { display: none; }
-  .slide-tag,
-  .slide-title,
-  .slide-subtitle,
-  .slide-body,
-  .accent-line,
-  .card,
-  .feature-list li,
-  .stat,
-  .agent-pill,
-  .tag {
+  .slide, .slide.active, .slide.exit-up { transform: none !important; }
+  .bg-grid, .orb, .particle-canvas { display: none; }
+  .slide-tag, .slide-title, .slide-subtitle, .accent-line,
+  .card, .feature-list li, .stat, .agent-pill, .tag {
     opacity: 1 !important;
     transform: none !important;
   }
 }
-
-/* Glow effect on active slide */
-.glow-line {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--blue), var(--violet), transparent);
-  opacity: 0;
-  transition: opacity 0.6s var(--ease) 0.4s;
-}
-
-.slide.active .glow-line {
-  opacity: 0.5;
-}
-
-/* Data viz style number */
-.data-number {
-  font-family: var(--font-display);
-  font-size: clamp(40px, 6vw, 72px);
-  font-weight: 900;
-  line-height: 1;
-  background: linear-gradient(135deg, var(--cream) 30%, var(--blue-soft));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.data-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--cream-40);
-  margin-top: 4px;
-}
-
-.data-delta {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--cyan);
-  margin-top: 2px;
-}
-
-.data-delta.negative { color: #FF5F57; }
 </style>
 </head>
 <body>
@@ -840,7 +763,7 @@ body {
 <div class="deck" role="region" aria-roledescription="slideshow" aria-label="PerformOS AI Team presentation">
   <canvas class="particle-canvas" id="particles" aria-hidden="true"></canvas>
   <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-orbs" id="orbs" aria-hidden="true">
+  <div class="bg-orbs" aria-hidden="true">
     <div class="orb orb-1" data-depth="1"></div>
     <div class="orb orb-2" data-depth="2"></div>
     <div class="orb orb-3" data-depth="0.5"></div>
@@ -849,12 +772,12 @@ body {
 
   <!-- Slide 1: Title -->
   <div class="slide active" id="s1">
-    <div class="slide-content slide-title-slide">
-      <div class="accent-line" style="margin:0 auto 28px"></div>
-      <div class="slide-tag" style="text-align:center" id="titleTag"></div>
-      <h1 class="slide-title" style="text-align:center">Your Private AI Team.<br><span class="highlight">Running Locally.</span></h1>
-      <p class="slide-subtitle" style="text-align:center; margin:0 auto 28px">Ten specialist AI agents. Fully customisable. Running on your hardware with zero data retention. No cloud subscriptions. No API costs.</p>
-      <div class="tag-cloud" style="justify-content:center">
+    <div class="slide-content is-centered">
+      <div class="accent-line"></div>
+      <div class="slide-tag" id="titleTag"></div>
+      <h1 class="slide-title">Your Private AI Team.<br><span class="highlight">Running Locally.</span></h1>
+      <p class="slide-subtitle">Ten specialist AI agents. Fully customisable. Running on your hardware with zero data retention. No cloud subscriptions. No API costs.</p>
+      <div class="tag-cloud">
         <span class="tag">Zero Data Retention</span>
         <span class="tag">100% Private</span>
         <span class="tag">Fully Customisable</span>
@@ -870,54 +793,54 @@ body {
       <div class="accent-line"></div>
       <div class="slide-tag">Cloud AI vs PerformOS Local AI</div>
       <h2 class="slide-title">You Would Not Send<br>Your Data to ChatGPT.<br><span class="highlight">So Why Send It<br>Anywhere Else?</span></h2>
-      <div style="margin-top:20px; width:100%; max-width:860px;">
-        <table style="width:100%; border-collapse:collapse; font-size:13px;">
+      <div class="cmp-wrap">
+        <table class="cmp-table">
           <thead>
             <tr>
-              <th style="text-align:left; padding:10px 12px; border-bottom:1px solid var(--cream-12); color:var(--cream-40); font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:2px; width:36%;">The Problem</th>
-              <th style="text-align:left; padding:10px 12px; border-bottom:1px solid var(--cream-12); color:var(--cream-40); font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:2px; width:28%;">Cloud AI (OpenAI, Claude, etc.)</th>
-              <th style="text-align:left; padding:10px 12px; border-bottom:1px solid var(--cream-12); color:var(--cream-40); font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:2px; width:36%;">PerformOS Local AI</th>
+              <th>The Problem</th>
+              <th>Cloud AI (OpenAI, Claude, etc.)</th>
+              <th>PerformOS Local AI</th>
             </tr>
           </thead>
           <tbody>
-            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
-              <td style="padding:12px; color:var(--cream-2);" rowspan="2"><strong>Data Retention</strong><br><span style="font-size:11px; color:var(--cream-40);">Where does your data go?</span></td>
-              <td style="padding:12px; color:#FF5F57; font-size:12px;">Data stored on their servers<br><span style="font-size:11px;">Used for model training in some cases</span></td>
-              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>Zero data retention</strong><br><span style="font-size:11px; color:var(--cream-2);">All processing on your hardware</span></td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
-              <td style="padding:12px; color:#FF5F57; font-size:12px;">Privacy policy applies<br><span style="font-size:11px;">You agree to their terms</span></td>
-              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>You own everything</strong><br><span style="font-size:11px; color:var(--cream-2);">No third-party data sharing</span></td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
-              <td style="padding:12px; color:var(--cream-2);"><strong>Cost Model</strong><br><span style="font-size:11px; color:var(--cream-40);">How are you charged?</span></td>
-              <td style="padding:12px; color:#FF5F57; font-size:12px;">Per-token + per-seat<br><span style="font-size:11px;">Bill grows with every user and every query</span></td>
-              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>Flat monthly fee</strong><br><span style="font-size:11px; color:var(--cream-2);">$4,999 AUD/mo, unlimited inference</span></td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
-              <td style="padding:12px; color:var(--cream-2);"><strong>GPT-5.5 API Cost</strong><br><span style="font-size:11px; color:var(--cream-40);">10 agents, heavy use</span></td>
-              <td style="padding:12px; color:#FF5F57; font-size:12px;">~$10,000-$20,000/mo<br><span style="font-size:11px;">At $15/1M tokens input, $60/1M output, 2B tokens/month</span></td>
-              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>$4,999 AUD flat</strong><br><span style="font-size:11px; color:var(--cream-2);">Zero per-token cost ever</span></td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
-              <td style="padding:12px; color:var(--cream-2);"><strong>Claude Opus 4 API Cost</strong><br><span style="font-size:11px; color:var(--cream-40);">10 agents, heavy use</span></td>
-              <td style="padding:12px; color:#FF5F57; font-size:12px;">~$6,000-$12,000/mo<br><span style="font-size:11px;">At $15/1M input, $75/1M output, 2B tokens/month</span></td>
-              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>$4,999 AUD flat</strong><br><span style="font-size:11px; color:var(--cream-2);">Same flat rate regardless</span></td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(240,240,245,0.06);">
-              <td style="padding:12px; color:var(--cream-2);"><strong>Vendor Lock-in</strong><br><span style="font-size:11px; color:var(--cream-40);">Can you switch?</span></td>
-              <td style="padding:12px; color:#FF5F57; font-size:12px;">Tied to one ecosystem<br><span style="font-size:11px;">Data, prompts, configs locked there</span></td>
-              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>Fully portable</strong><br><span style="font-size:11px; color:var(--cream-2);">Runs on commodity hardware</span></td>
+            <tr>
+              <td class="label" rowspan="2"><strong>Data Retention</strong><span class="sub">Where does your data go?</span></td>
+              <td class="bad">Data stored on their servers<span class="sub">Used for model training in some cases</span></td>
+              <td class="good"><strong>Zero data retention</strong><span class="sub">All processing on your hardware</span></td>
             </tr>
             <tr>
-              <td style="padding:12px; color:var(--cream-2);"><strong>Compliance</strong><br><span style="font-size:11px; color:var(--cream-40);">Legal, healthcare, finance</span></td>
-              <td style="padding:12px; color:#FF5F57; font-size:12px;">Often a hard no<br><span style="font-size:11px;">Data leaves the building</span></td>
-              <td style="padding:12px; color:var(--cyan); font-size:12px;"><strong>Compliant by design</strong><br><span style="font-size:11px; color:var(--cream-2);">Nothing leaves your network</span></td>
+              <td class="bad">Privacy policy applies<span class="sub">You agree to their terms</span></td>
+              <td class="good"><strong>You own everything</strong><span class="sub">No third-party data sharing</span></td>
+            </tr>
+            <tr>
+              <td class="label"><strong>Cost Model</strong><span class="sub">How are you charged?</span></td>
+              <td class="bad">Per-token + per-seat<span class="sub">Bill grows with every user and every query</span></td>
+              <td class="good"><strong>Flat monthly fee</strong><span class="sub">$4,999 AUD/mo, unlimited inference</span></td>
+            </tr>
+            <tr>
+              <td class="label"><strong>GPT-5.5 API Cost</strong><span class="sub">10 agents, heavy use</span></td>
+              <td class="bad">~$10,000-$20,000/mo<span class="sub">At $15/1M tokens input, $60/1M output, 2B tokens/month</span></td>
+              <td class="good"><strong>$4,999 AUD flat</strong><span class="sub">Zero per-token cost ever</span></td>
+            </tr>
+            <tr>
+              <td class="label"><strong>Claude Opus 4 API Cost</strong><span class="sub">10 agents, heavy use</span></td>
+              <td class="bad">~$6,000-$12,000/mo<span class="sub">At $15/1M input, $75/1M output, 2B tokens/month</span></td>
+              <td class="good"><strong>$4,999 AUD flat</strong><span class="sub">Same flat rate regardless</span></td>
+            </tr>
+            <tr>
+              <td class="label"><strong>Vendor Lock-in</strong><span class="sub">Can you switch?</span></td>
+              <td class="bad">Tied to one ecosystem<span class="sub">Data, prompts, configs locked there</span></td>
+              <td class="good"><strong>Fully portable</strong><span class="sub">Runs on commodity hardware</span></td>
+            </tr>
+            <tr>
+              <td class="label"><strong>Compliance</strong><span class="sub">Legal, healthcare, finance</span></td>
+              <td class="bad">Often a hard no<span class="sub">Data leaves the building</span></td>
+              <td class="good"><strong>Compliant by design</strong><span class="sub">Nothing leaves your network</span></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div style="margin-top:20px; font-size:12px; color:var(--cream-40); padding:14px 18px; background:var(--ink-2); border:1px solid var(--cream-12); border-radius:8px; max-width:860px; line-height:1.55;">
+      <div class="callout">
         API pricing in USD, based on OpenAI GPT-5.5 ($15/1M input, $60/1M output) and Claude Opus 4 ($15/1M input, $75/1M output) as at May 2026. PerformOS pricing in AUD. 2 billion tokens per month estimated for 10 agents at medium to heavy use.
       </div>
     </div>
@@ -1073,44 +996,43 @@ body {
       <div class="accent-line"></div>
       <div class="slide-tag">Two Tiers, Same 10 Agents</div>
       <h2 class="slide-title"><span class="highlight">Standard</span> or <span class="highlight-cyan">Advanced</span><br>Pick Your Depth</h2>
-      <!-- subtitle below; pricing reference is on slide 10 -->
       <p class="slide-subtitle">Both tiers give you the same 10 customisable AI agents. Same tool connections. Same zero data retention. The difference is the model size and capability behind each agent.</p>
-      <div class="cards-grid" style="max-width:900px; gap:20px;">
-        <div class="card" style="border-color:rgba(59,130,246,0.25);">
-          <div class="card-num" style="color:var(--blue);">Standard</div>
-          <div class="card-title" style="font-size:18px; margin-bottom:4px;">Fast, Efficient, High Volume</div>
-          <div style="font-size:11px; font-family:var(--font-mono); color:var(--blue); margin-bottom:10px;">8B parameter models</div>
-          <div class="card-desc" style="line-height:1.65;">
+      <div class="cards-grid wide">
+        <div class="card tier standard">
+          <div class="card-num">Standard</div>
+          <div class="tier-headline">Fast, Efficient, High Volume</div>
+          <div class="tier-models">8B parameter models</div>
+          <div class="tier-body">
             The "B" stands for billion parameters, which is the number of connections the model learned during training. 8 billion is a lot. These models handle everyday business tasks with speed and precision across all 10 agents at the same time.<br><br>
             Think of it like this: 8B models are highly competent generalists. They write well, analyse data, coach teams, review contracts, and research topics. They do all of it fast and they do it for all 10 agents simultaneously.<br><br>
-            <strong style="color:var(--cream-2);">Best fit when your priority is:</strong><br>
+            <strong>Best fit when your priority is:</strong><br>
             • Processing volume across all agents<br>
             • Speed on routine and repeatable tasks<br>
             • Cost-efficient hardware (24GB RAM)<br>
             <br>
-            <strong style="color:var(--cream-2);">Same compliance as Advanced:</strong><br>
+            <strong>Same compliance as Advanced:</strong><br>
             • Zero data retention ✓<br>
             • Full data compliance ✓<br>
             • 10 customisable agents ✓
           </div>
         </div>
-        <div class="card" style="border-color:rgba(139,92,246,0.25);">
-          <div class="card-num" style="color:var(--violet);">Advanced</div>
-          <div class="card-title" style="font-size:18px; margin-bottom:4px;">Deep, Powerful, Complex Reasoning</div>
-          <div style="font-size:11px; font-family:var(--font-mono); color:var(--violet); margin-bottom:10px;">14B to 70B parameter models</div>
-          <div class="card-desc" style="line-height:1.65;">
+        <div class="card tier advanced">
+          <div class="card-num">Advanced</div>
+          <div class="tier-headline">Deep, Powerful, Complex Reasoning</div>
+          <div class="tier-models">14B to 70B parameter models</div>
+          <div class="tier-body">
             Same as Standard but with significantly more processing capacity. A 70B model has nearly 9 times more learned connections than an 8B model. That translates to stronger reasoning, deeper analysis, and meaningfully better performance on ambiguous or high-stakes tasks.<br><br>
             Think of it like this: if 8B models are senior employees, 14B to 70B models are the partners. They handle everything the 8B models do, but they go deeper. Better at complex strategy, nuanced judgement, and work where getting it right matters more than getting it fast.<br><br>
-            <strong style="color:var(--cream-2);">Hardware note:</strong> Advanced models need more memory during setup. We provision 48GB RAM during your onboarding to accommodate the larger model sizes. This is handled as part of the setup fee.<br><br>
-            <strong style="color:var(--cream-2);">Same compliance as Standard:</strong><br>
+            <strong>Hardware note:</strong> Advanced models need more memory during setup. We provision 48GB RAM during your onboarding to accommodate the larger model sizes. This is handled as part of the setup fee.<br><br>
+            <strong>Same compliance as Standard:</strong><br>
             • Zero data retention ✓<br>
             • Full data compliance ✓<br>
             • 10 customisable agents ✓
           </div>
         </div>
       </div>
-      <div style="margin-top:20px; font-size:13px; color:var(--cream-40); padding:14px 18px; background:var(--ink-2); border:1px solid var(--cream-12); border-radius:8px; max-width:900px; line-height:1.55;">
-        <strong style="color:var(--cream-2);">The simplest way to think about it:</strong> Standard is like having 10 highly efficient specialists. Advanced is like having 10 senior experts. Both get the job done. The experts just go deeper when the work demands it. Pricing on the next slide.
+      <div class="callout tight">
+        <strong class="accent">The simplest way to think about it:</strong> Standard is like having 10 highly efficient specialists. Advanced is like having 10 senior experts. Both get the job done. The experts just go deeper when the work demands it. Pricing on the next slide.
       </div>
     </div>
     <div class="glow-line"></div>
@@ -1123,30 +1045,30 @@ body {
       <div class="slide-tag">Pricing</div>
       <h2 class="slide-title">Same Monthly. <span class="highlight">Different Setup.</span></h2>
       <p class="slide-subtitle">$4,999 AUD/month for either tier. No per-token charges. No per-seat licensing. No surprise bills. One flat monthly fee for your entire AI team. 6-month minimum.</p>
-      <div class="cards-grid" style="max-width:900px; gap:20px; margin-top:20px;">
-        <div class="card" style="border-color:rgba(59,130,246,0.25); text-align:center; padding:28px 24px;">
-          <div class="card-num" style="text-align:center; color:var(--blue);">Standard</div>
-          <div style="font-family:var(--font-display); font-size:16px; font-weight:700; color:var(--cream); margin:10px 0 6px;">Fast and Efficient</div>
-          <div style="font-size:13px; color:var(--cream-40); margin-bottom:18px;">10 agents. High volume. Everyday business tasks done right.</div>
-          <div style="border-top:1px solid var(--cream-12); padding-top:16px;">
-            <div style="font-size:11px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:2px; color:var(--cream-40); margin-bottom:6px;">One-Time Setup</div>
-            <div style="font-family:var(--font-display); font-size:36px; font-weight:900; color:var(--cream);">$3,000</div>
-            <div style="font-size:11px; color:var(--cream-40); margin-top:4px;">+ your monthly retainer</div>
+      <div class="cards-grid wide">
+        <div class="card price standard">
+          <div class="card-num">Standard</div>
+          <div class="price-headline">Fast and Efficient</div>
+          <div class="price-blurb">10 agents. High volume. Everyday business tasks done right.</div>
+          <div class="price-divider">
+            <div class="price-cap">One-Time Setup</div>
+            <div class="price-amount">$3,000</div>
+            <div class="price-note">+ your monthly retainer</div>
           </div>
         </div>
-        <div class="card" style="border-color:rgba(139,92,246,0.25); text-align:center; padding:28px 24px;">
-          <div class="card-num" style="text-align:center; color:var(--violet);">Advanced</div>
-          <div style="font-family:var(--font-display); font-size:16px; font-weight:700; color:var(--cream); margin:10px 0 6px;">Deep and Powerful</div>
-          <div style="font-size:13px; color:var(--cream-40); margin-bottom:18px;">10 agents. Complex reasoning. Strategic thinking and nuanced judgement.</div>
-          <div style="border-top:1px solid var(--cream-12); padding-top:16px;">
-            <div style="font-size:11px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:2px; color:var(--cream-40); margin-bottom:6px;">One-Time Setup</div>
-            <div style="font-family:var(--font-display); font-size:36px; font-weight:900; color:var(--cream);">$6,000</div>
-            <div style="font-size:11px; color:var(--cream-40); margin-top:4px;">+ your monthly retainer</div>
+        <div class="card price advanced">
+          <div class="card-num">Advanced</div>
+          <div class="price-headline">Deep and Powerful</div>
+          <div class="price-blurb">10 agents. Complex reasoning. Strategic thinking and nuanced judgement.</div>
+          <div class="price-divider">
+            <div class="price-cap">One-Time Setup</div>
+            <div class="price-amount">$6,000</div>
+            <div class="price-note">+ your monthly retainer</div>
           </div>
         </div>
       </div>
-      <div style="margin-top:16px; font-size:12px; color:var(--cream-40); padding:14px 18px; background:var(--ink-2); border:1px solid var(--cream-12); border-radius:8px; max-width:900px; line-height:1.55; text-align:center;">
-        Monthly retainer for either tier: <strong style="color:var(--cream);">$4,999 AUD/month</strong> · Setup includes 10 hours remote onboarding, agent configuration, integration, team training and go-live support · 6-month minimum
+      <div class="callout center">
+        Monthly retainer for either tier: <strong>$4,999 AUD/month</strong> · Setup includes 10 hours remote onboarding, agent configuration, integration, team training and go-live support · 6-month minimum
       </div>
     </div>
     <div class="glow-line"></div>
@@ -1159,29 +1081,29 @@ body {
       <div class="slide-tag">The Process</div>
       <h2 class="slide-title">From Zero to Full<br><span class="highlight">AI Team in 2 Weeks</span></h2>
       <div class="cards-grid grid-4">
-        <div class="card" style="text-align:center; padding:18px 14px;">
-          <div class="card-num" style="text-align:center">Step 1</div>
-          <div style="font-size:22px; margin:6px 0">📋</div>
-          <div class="card-title" style="font-size:13px">Discovery Call</div>
-          <div class="card-desc" style="font-size:11px">Questionnaire plus 60-minute call to understand your business, priorities, and tool landscape</div>
+        <div class="card step">
+          <div class="card-num">Step 1</div>
+          <div class="step-icon">📋</div>
+          <div class="card-title">Discovery Call</div>
+          <div class="card-desc">Questionnaire plus 60-minute call to understand your business, priorities, and tool landscape</div>
         </div>
-        <div class="card" style="text-align:center; padding:18px 14px;">
-          <div class="card-num" style="text-align:center">Step 2</div>
-          <div style="font-size:22px; margin:6px 0">⚙️</div>
-          <div class="card-title" style="font-size:13px">Agent Configuration</div>
-          <div class="card-desc" style="font-size:11px">All 10 agents configured with your context, connected to your tools via MCP</div>
+        <div class="card step">
+          <div class="card-num">Step 2</div>
+          <div class="step-icon">⚙️</div>
+          <div class="card-title">Agent Configuration</div>
+          <div class="card-desc">All 10 agents configured with your context, connected to your tools via MCP</div>
         </div>
-        <div class="card" style="text-align:center; padding:18px 14px;">
-          <div class="card-num" style="text-align:center">Step 3</div>
-          <div style="font-size:22px; margin:6px 0">🧪</div>
-          <div class="card-title" style="font-size:13px">Integration and Testing</div>
-          <div class="card-desc" style="font-size:11px">End-to-end testing with real data. Approval gates configured. Audit logging active</div>
+        <div class="card step">
+          <div class="card-num">Step 3</div>
+          <div class="step-icon">🧪</div>
+          <div class="card-title">Integration and Testing</div>
+          <div class="card-desc">End-to-end testing with real data. Approval gates configured. Audit logging active</div>
         </div>
-        <div class="card" style="text-align:center; padding:18px 14px;">
-          <div class="card-num" style="text-align:center">Step 4</div>
-          <div style="font-size:22px; margin:6px 0">🚀</div>
-          <div class="card-title" style="font-size:13px">Go-Live and Handover</div>
-          <div class="card-desc" style="font-size:11px">Team training, documentation, and first month of optimisation calls included</div>
+        <div class="card step">
+          <div class="card-num">Step 4</div>
+          <div class="step-icon">🚀</div>
+          <div class="card-title">Go-Live and Handover</div>
+          <div class="card-desc">Team training, documentation, and first month of optimisation calls included</div>
         </div>
       </div>
     </div>
@@ -1190,30 +1112,30 @@ body {
 
   <!-- Slide 12: Customiser -->
   <div class="slide" id="s12">
-    <div class="slide-content" style="text-align:center; align-items:center;">
-      <div class="accent-line" style="margin:0 auto 28px"></div>
-      <div class="slide-tag" style="text-align:center">The Differentiator</div>
-      <h2 class="slide-title" style="text-align:center">Customisable.<br><span class="highlight-cyan">Not Just Configurable.</span></h2>
-      <p class="slide-subtitle" style="text-align:center; margin:0 auto 28px">Every agent starts with deep domain expertise. But during the 4 hours of deep discovery built into your onboarding, we do not just flip switches. We learn how your business actually works, what your team cares about, what decisions keep you up at night. Then we customise every agent to match.</p>
-      <div class="stats-row" style="justify-content:center">
-        <div class="stat" style="text-align:center">
+    <div class="slide-content is-centered">
+      <div class="accent-line"></div>
+      <div class="slide-tag">The Differentiator</div>
+      <h2 class="slide-title">Customisable.<br><span class="highlight-cyan">Not Just Configurable.</span></h2>
+      <p class="slide-subtitle">Every agent starts with deep domain expertise. But during the 4 hours of deep discovery built into your onboarding, we do not just flip switches. We learn how your business actually works, what your team cares about, what decisions keep you up at night. Then we customise every agent to match.</p>
+      <div class="stats-row">
+        <div class="stat">
           <div class="stat-val">4 hrs</div>
           <div class="stat-label">Deep Discovery</div>
         </div>
-        <div class="stat" style="text-align:center">
-          <div class="stat-val" style="font-size:clamp(18px,2.5vw,28px);">Your Voice</div>
+        <div class="stat">
+          <div class="stat-val is-text">Your Voice</div>
           <div class="stat-label">Agent Tone Match</div>
         </div>
-        <div class="stat" style="text-align:center">
-          <div class="stat-val" style="font-size:clamp(18px,2.5vw,28px);">Your Data</div>
+        <div class="stat">
+          <div class="stat-val is-text">Your Data</div>
           <div class="stat-label">Knowledge Bases</div>
         </div>
-        <div class="stat" style="text-align:center">
-          <div class="stat-val" style="font-size:clamp(18px,2.5vw,28px);">Your Workflows</div>
+        <div class="stat">
+          <div class="stat-val is-text">Your Workflows</div>
           <div class="stat-label">Built In</div>
         </div>
       </div>
-      <p style="margin-top:28px; font-style:italic; color:var(--cream-40); max-width:560px; font-size:14px;">"You do not get a template. You get a team that knows your business."</p>
+      <p class="closing-quote">"You do not get a template. You get a team that knows your business."</p>
     </div>
     <div class="glow-line"></div>
   </div>
@@ -1238,41 +1160,55 @@ body {
 
   <!-- Slide 14: CTA -->
   <div class="slide" id="s14">
-    <div class="slide-content slide-title-slide">
-      <div class="accent-line" style="margin:0 auto 28px"></div>
-      <div class="slide-tag" style="text-align:center">Ready?</div>
-      <h2 class="slide-title" style="text-align:center">Build Your<br><span class="highlight">AI Team.</span></h2>
-      <p class="slide-subtitle" style="text-align:center">30-minute discovery call. No pitch. Just understanding your business and showing you what is possible.</p>
-      <div class="cta-block" style="justify-content:center">
+    <div class="slide-content is-centered">
+      <div class="accent-line"></div>
+      <div class="slide-tag">Ready?</div>
+      <h2 class="slide-title">Build Your<br><span class="highlight">AI Team.</span></h2>
+      <p class="slide-subtitle">30-minute discovery call. No pitch. Just understanding your business and showing you what is possible.</p>
+      <div class="cta-block">
         <button type="button" class="btn-primary">Book a Discovery Call →</button>
         <button type="button" class="btn-secondary">Download the Spec</button>
       </div>
-      <div style="margin-top:36px; font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--cream-40);">
-        PerformOS AI Team — Local Edition — Zero Data Retention
-      </div>
+      <div class="footer-tag">PerformOS AI Team — Local Edition — Zero Data Retention</div>
     </div>
     <div class="glow-line"></div>
   </div>
 
 </div>
 
+<!-- Brand Logo -->
+<div class="brand-logo" aria-label="Performlytics and PerformOS">
+  <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+    <defs>
+      <linearGradient id="brandGrad" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#3B82F6"/>
+        <stop offset="100%" stop-color="#8B5CF6"/>
+      </linearGradient>
+    </defs>
+    <rect x="3"  y="14" width="4" height="7"  rx="1" fill="url(#brandGrad)"/>
+    <rect x="10" y="9"  width="4" height="12" rx="1" fill="url(#brandGrad)"/>
+    <rect x="17" y="4"  width="4" height="17" rx="1" fill="url(#brandGrad)"/>
+  </svg>
+  <span class="brand-wordmark">Performlytics <span class="brand-x">×</span> PerformOS</span>
+</div>
+
 <!-- Navigation -->
 <div class="nav-bar">
   <div class="nav-brand">PerformOS AI Team</div>
   <div class="nav-center">
-    <button class="nav-btn" onclick="prevSlide()" aria-label="Previous slide">←</button>
+    <button class="nav-btn" type="button" onclick="prevSlide()" aria-label="Previous slide">←</button>
     <div class="dots" id="dots"></div>
-    <button class="nav-btn" onclick="nextSlide()" aria-label="Next slide">→</button>
+    <button class="nav-btn" type="button" onclick="nextSlide()" aria-label="Next slide">→</button>
   </div>
   <div class="counter" id="counter">1 / 14</div>
 </div>
 
 <script>
-const slides = document.querySelectorAll('.slide');
-const dotsContainer = document.getElementById('dots');
-const counter = document.getElementById('counter');
-const announcer = document.getElementById('slideAnnouncer');
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const slides         = document.querySelectorAll('.slide');
+const dotsContainer  = document.getElementById('dots');
+const counter        = document.getElementById('counter');
+const announcer      = document.getElementById('slideAnnouncer');
+const reducedMotion  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let current = 0;
 const total = slides.length;
 
@@ -1308,8 +1244,8 @@ function update() {
 }
 
 function nextSlide() { if (current < total - 1) { current++; update(); } }
-function prevSlide() { if (current > 0) { current--; update(); } }
-function goTo(i) { current = i; update(); }
+function prevSlide() { if (current > 0)         { current--; update(); } }
+function goTo(i)     { current = i; update(); }
 
 function isTypingTarget(el) {
   if (!el) return false;
@@ -1320,9 +1256,9 @@ function isTypingTarget(el) {
 document.addEventListener('keydown', e => {
   if (isTypingTarget(e.target)) return;
   if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nextSlide(); }
-  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
-  if (e.key === 'Home') { e.preventDefault(); goTo(0); }
-  if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'PageUp')                    { e.preventDefault(); prevSlide(); }
+  if (e.key === 'Home')                                                 { e.preventDefault(); goTo(0); }
+  if (e.key === 'End')                                                  { e.preventDefault(); goTo(total - 1); }
 });
 
 let touchStartX = 0, touchStartY = 0;
@@ -1338,23 +1274,23 @@ document.addEventListener('touchend', e => {
   }
 });
 
-/* ---- Particle Canvas ---- */
+/* Particle canvas */
 (function() {
   if (reducedMotion) return;
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
-  let w, h, dpr = 1, particles = [];
   const COUNT = 60;
-  let rafId = null;
-  let running = true;
+  const LINK_DIST = 150;
+  let w, h, dpr = 1, rafId = null, running = true;
+  const particles = [];
 
   function resize() {
     dpr = window.devicePixelRatio || 1;
     w = window.innerWidth;
     h = window.innerHeight;
-    canvas.width = Math.floor(w * dpr);
+    canvas.width  = Math.floor(w * dpr);
     canvas.height = Math.floor(h * dpr);
-    canvas.style.width = w + 'px';
+    canvas.style.width  = w + 'px';
     canvas.style.height = h + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
@@ -1374,25 +1310,27 @@ document.addEventListener('touchend', e => {
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-    particles.forEach(p => {
+    for (const p of particles) {
       p.x += p.vx; p.y += p.vy;
-      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
-      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+      if (p.x < 0) p.x = w; else if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; else if (p.y > h) p.y = 0;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(59,130,246,${p.alpha})`;
       ctx.fill();
-    });
+    }
     for (let i = 0; i < COUNT; i++) {
+      const pi = particles[i];
       for (let j = i + 1; j < COUNT; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150) {
+        const pj = particles[j];
+        const dx = pi.x - pj.x, dy = pi.y - pj.y;
+        const distSq = dx * dx + dy * dy;
+        if (distSq < LINK_DIST * LINK_DIST) {
+          const dist = Math.sqrt(distSq);
           ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(59,130,246,${0.08 * (1 - dist / 150)})`;
+          ctx.moveTo(pi.x, pi.y);
+          ctx.lineTo(pj.x, pj.y);
+          ctx.strokeStyle = `rgba(59,130,246,${0.08 * (1 - dist / LINK_DIST)})`;
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
@@ -1413,10 +1351,10 @@ document.addEventListener('touchend', e => {
   });
 })();
 
-/* ---- Mouse Parallax on Orbs ---- */
+/* Mouse parallax on orbs */
 if (!reducedMotion) {
   document.addEventListener('mousemove', e => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 2;
+    const x = (e.clientX / window.innerWidth  - 0.5) * 2;
     const y = (e.clientY / window.innerHeight - 0.5) * 2;
     document.querySelectorAll('.orb').forEach(orb => {
       const depth = parseFloat(orb.dataset.depth) || 1;
@@ -1425,29 +1363,24 @@ if (!reducedMotion) {
   });
 }
 
-/* ---- Typing Effect on Title Tag ---- */
+/* Typing effect on title tag */
 (function() {
   const el = document.getElementById('titleTag');
   if (!el) return;
   const text = 'Performlytics x PerformOS';
   el.style.opacity = '1';
   el.style.transform = 'translateY(0)';
-  if (reducedMotion) {
-    el.textContent = text;
-    return;
-  }
+  if (reducedMotion) { el.textContent = text; return; }
   let i = 0;
-  function type() {
+  (function type() {
     if (i <= text.length) {
-      el.textContent = text.substring(0, i);
-      i++;
+      el.textContent = text.substring(0, i++);
       setTimeout(type, 50);
     }
-  }
-  setTimeout(type, 600);
+  })();
 })();
 
-/* ---- Count-Up Animation on Stats ---- */
+/* Count-up animation on stats */
 function triggerCountUp() {
   const activeSlide = document.querySelector('.slide.active');
   if (!activeSlide) return;
@@ -1465,20 +1398,17 @@ function triggerCountUp() {
       return;
     }
     const duration = 1200;
-    const start = performance.now();
-    function animate(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
+    let start = null;
+    requestAnimationFrame(function step(now) {
+      if (start === null) start = now;
+      const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.round(target * eased);
-      el.textContent = prefix + current.toLocaleString() + suffix;
-      if (progress < 1) requestAnimationFrame(animate);
-    }
-    requestAnimationFrame(animate);
+      el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    });
   });
 }
 
-// Trigger on first load
 setTimeout(triggerCountUp, 800);
 </script>
 </body>
