@@ -88,6 +88,15 @@ body {
   transform: perspective(1200px) translateY(-40px) rotateX(-4deg) scale(0.98);
   opacity: 0;
 }
+/* Top-aligned variant for slides whose content is too tall to vertically center */
+.slide.dense { justify-content: flex-start; padding-top: 56px; padding-bottom: 80px; }
+.slide.dense .slide-title    { font-size: clamp(22px, 3.2vw, 38px); margin-bottom: 14px; }
+.slide.dense .slide-subtitle { font-size: 14px; margin-bottom: 16px; }
+.slide.dense .callout        { margin-top: 12px; padding: 10px 14px; }
+.slide.dense .cmp-table td   { padding: 9px 10px; }
+.slide.dense .cmp-table .sub { font-size: 10px; }
+.slide.dense .card.tier      { padding: 18px; }
+.slide.dense .card.tier .tier-body { font-size: 12px; line-height: 1.55; }
 .slide-content { max-width: 960px; width: 100%; }
 .slide > * { position: relative; z-index: 1; }
 
@@ -242,14 +251,22 @@ body {
   position: absolute;
   inset: -1px;
   border-radius: 11px;
-  background: conic-gradient(from 0deg, var(--blue), var(--violet), var(--cyan), var(--blue));
+  padding: 1px;
+  background: conic-gradient(from var(--rim-angle, 0deg), var(--blue), var(--violet), var(--cyan), var(--blue));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
   opacity: 0;
   transition: opacity 0.4s;
-  z-index: -1;
-  animation: cardBorderSpin 4s linear infinite;
-  animation-play-state: paused;
+  pointer-events: none;
 }
-@keyframes cardBorderSpin { to { transform: rotate(360deg); } }
+@property --rim-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes cardBorderSpin { to { --rim-angle: 360deg; } }
 
 .slide.active .card {
   opacity: 1;
@@ -265,8 +282,10 @@ body {
   box-shadow: 0 8px 32px rgba(59,130,246,0.12), 0 0 0 1px rgba(59,130,246,0.1);
   transform: translateY(-2px) scale(1.01);
 }
-.card:hover::before { opacity: 0.6; }
-.slide.active .card:hover::before { animation-play-state: running; }
+.card:hover::before {
+  opacity: 0.6;
+  animation: cardBorderSpin 4s linear infinite;
+}
 
 .card-num {
   font-family: var(--font-mono);
@@ -788,7 +807,7 @@ body {
   </div>
 
   <!-- Slide 2: The Problem vs The Solution -->
-  <div class="slide" id="s2">
+  <div class="slide dense" id="s2">
     <div class="slide-content">
       <div class="accent-line"></div>
       <div class="slide-tag">Cloud AI vs PerformOS Local AI</div>
@@ -991,7 +1010,7 @@ body {
   </div>
 
   <!-- Slide 9: Two Tiers -->
-  <div class="slide" id="s9">
+  <div class="slide dense" id="s9">
     <div class="slide-content">
       <div class="accent-line"></div>
       <div class="slide-tag">Two Tiers, Same 10 Agents</div>
