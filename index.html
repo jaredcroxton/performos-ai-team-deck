@@ -64,26 +64,35 @@ body {
   padding: 72px 96px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(40px) scale(0.98);
-  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease), visibility 0.6s;
+  transform: perspective(1200px) translateY(60px) rotateX(8deg) scale(0.96);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease), visibility 0.7s;
   overflow-y: auto;
   background: var(--ink);
+  transform-origin: center top;
 }
 
 .slide.active {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0) scale(1);
+  transform: perspective(1200px) translateY(0) rotateX(0deg) scale(1);
 }
 
 .slide.exit-up {
-  transform: translateY(-30px) scale(0.99);
+  transform: perspective(1200px) translateY(-40px) rotateX(-4deg) scale(0.98);
   opacity: 0;
 }
 
 .slide-content {
   max-width: 960px;
   width: 100%;
+}
+
+/* Particle canvas */
+.particle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Animated background grid */
@@ -183,13 +192,13 @@ body {
   color: var(--cream);
   margin-bottom: 20px;
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s var(--ease) 0.35s, transform 0.6s var(--ease) 0.35s;
+  transform: translateY(24px) scale(0.97);
+  transition: opacity 0.65s var(--ease-spring) 0.35s, transform 0.65s var(--ease-spring) 0.35s;
 }
 
 .slide.active .slide-title {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .slide-title .highlight {
@@ -272,24 +281,49 @@ body {
   border: 1px solid var(--cream-12);
   border-radius: 10px;
   padding: 22px;
-  transition: all 0.3s var(--ease);
+  transition: transform 0.35s var(--ease-spring), border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring);
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(30px) scale(0.97);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 11px;
+  background: conic-gradient(from 0deg, var(--blue), var(--violet), var(--cyan), var(--blue));
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: -1;
+  animation: cardBorderSpin 4s linear infinite;
+}
+
+@keyframes cardBorderSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .slide.active .card {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-.slide.active .card:nth-child(1) { transition: opacity 0.5s var(--ease) 0.5s, transform 0.5s var(--ease) 0.5s, border-color 0.3s, background 0.3s; }
-.slide.active .card:nth-child(2) { transition: opacity 0.5s var(--ease) 0.6s, transform 0.5s var(--ease) 0.6s, border-color 0.3s, background 0.3s; }
-.slide.active .card:nth-child(3) { transition: opacity 0.5s var(--ease) 0.7s, transform 0.5s var(--ease) 0.7s, border-color 0.3s, background 0.3s; }
-.slide.active .card:nth-child(4) { transition: opacity 0.5s var(--ease) 0.8s, transform 0.5s var(--ease) 0.8s, border-color 0.3s, background 0.3s; }
+.slide.active .card:nth-child(1) { transition: opacity 0.55s var(--ease-spring) 0.5s, transform 0.55s var(--ease-spring) 0.5s, border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring); }
+.slide.active .card:nth-child(2) { transition: opacity 0.55s var(--ease-spring) 0.62s, transform 0.55s var(--ease-spring) 0.62s, border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring); }
+.slide.active .card:nth-child(3) { transition: opacity 0.55s var(--ease-spring) 0.74s, transform 0.55s var(--ease-spring) 0.74s, border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring); }
+.slide.active .card:nth-child(4) { transition: opacity 0.55s var(--ease-spring) 0.86s, transform 0.55s var(--ease-spring) 0.86s, border-color 0.3s, background 0.3s, box-shadow 0.35s var(--ease-spring); }
 
 .card:hover {
-  border-color: rgba(59,130,246,0.3);
+  border-color: transparent;
   background: var(--ink-3);
+  box-shadow: 0 8px 32px rgba(59,130,246,0.12), 0 0 0 1px rgba(59,130,246,0.1);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.card:hover::before {
+  opacity: 0.6;
 }
 
 .card-num {
@@ -342,7 +376,11 @@ body {
   font-size: 14px;
   color: var(--cream-2);
   opacity: 0;
-  transform: translateX(-12px);
+  transform: translateX(-20px);
+}
+
+.feature-list li:nth-child(even) {
+  transform: translateX(20px);
 }
 
 .slide.active .feature-list li {
@@ -350,12 +388,12 @@ body {
   transform: translateX(0);
 }
 
-.slide.active .feature-list li:nth-child(1) { transition: opacity 0.4s var(--ease) 0.5s, transform 0.4s var(--ease) 0.5s; }
-.slide.active .feature-list li:nth-child(2) { transition: opacity 0.4s var(--ease) 0.6s, transform 0.4s var(--ease) 0.6s; }
-.slide.active .feature-list li:nth-child(3) { transition: opacity 0.4s var(--ease) 0.7s, transform 0.4s var(--ease) 0.7s; }
-.slide.active .feature-list li:nth-child(4) { transition: opacity 0.4s var(--ease) 0.8s, transform 0.4s var(--ease) 0.8s; }
-.slide.active .feature-list li:nth-child(5) { transition: opacity 0.4s var(--ease) 0.9s, transform 0.4s var(--ease) 0.9s; }
-.slide.active .feature-list li:nth-child(6) { transition: opacity 0.4s var(--ease) 1.0s, transform 0.4s var(--ease) 1.0s; }
+.slide.active .feature-list li:nth-child(1) { transition: opacity 0.45s var(--ease-spring) 0.5s, transform 0.45s var(--ease-spring) 0.5s; }
+.slide.active .feature-list li:nth-child(2) { transition: opacity 0.45s var(--ease-spring) 0.6s, transform 0.45s var(--ease-spring) 0.6s; }
+.slide.active .feature-list li:nth-child(3) { transition: opacity 0.45s var(--ease-spring) 0.7s, transform 0.45s var(--ease-spring) 0.7s; }
+.slide.active .feature-list li:nth-child(4) { transition: opacity 0.45s var(--ease-spring) 0.8s, transform 0.45s var(--ease-spring) 0.8s; }
+.slide.active .feature-list li:nth-child(5) { transition: opacity 0.45s var(--ease-spring) 0.9s, transform 0.45s var(--ease-spring) 0.9s; }
+.slide.active .feature-list li:nth-child(6) { transition: opacity 0.45s var(--ease-spring) 1.0s, transform 0.45s var(--ease-spring) 1.0s; }
 
 .feature-list li:last-child { border-bottom: none; }
 
@@ -445,16 +483,16 @@ body {
   transform: translateY(0);
 }
 
-.slide.active .agent-pill:nth-child(1) { transition: opacity 0.4s var(--ease) 0.45s, transform 0.4s var(--ease) 0.45s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(2) { transition: opacity 0.4s var(--ease) 0.50s, transform 0.4s var(--ease) 0.50s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(3) { transition: opacity 0.4s var(--ease) 0.55s, transform 0.4s var(--ease) 0.55s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(4) { transition: opacity 0.4s var(--ease) 0.60s, transform 0.4s var(--ease) 0.60s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(5) { transition: opacity 0.4s var(--ease) 0.65s, transform 0.4s var(--ease) 0.65s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(6) { transition: opacity 0.4s var(--ease) 0.70s, transform 0.4s var(--ease) 0.70s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(7) { transition: opacity 0.4s var(--ease) 0.75s, transform 0.4s var(--ease) 0.75s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(8) { transition: opacity 0.4s var(--ease) 0.80s, transform 0.4s var(--ease) 0.80s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(9) { transition: opacity 0.4s var(--ease) 0.85s, transform 0.4s var(--ease) 0.85s, border-color 0.25s, background 0.25s; }
-.slide.active .agent-pill:nth-child(10) { transition: opacity 0.4s var(--ease) 0.90s, transform 0.4s var(--ease) 0.90s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(1) { transition: opacity 0.4s var(--ease-spring) 0.45s, transform 0.4s var(--ease-spring) 0.45s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(2) { transition: opacity 0.4s var(--ease-spring) 0.50s, transform 0.4s var(--ease-spring) 0.50s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(3) { transition: opacity 0.4s var(--ease-spring) 0.55s, transform 0.4s var(--ease-spring) 0.55s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(4) { transition: opacity 0.4s var(--ease-spring) 0.60s, transform 0.4s var(--ease-spring) 0.60s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(5) { transition: opacity 0.4s var(--ease-spring) 0.65s, transform 0.4s var(--ease-spring) 0.65s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(6) { transition: opacity 0.4s var(--ease-spring) 0.70s, transform 0.4s var(--ease-spring) 0.70s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(7) { transition: opacity 0.4s var(--ease-spring) 0.75s, transform 0.4s var(--ease-spring) 0.75s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(8) { transition: opacity 0.4s var(--ease-spring) 0.80s, transform 0.4s var(--ease-spring) 0.80s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(9) { transition: opacity 0.4s var(--ease-spring) 0.85s, transform 0.4s var(--ease-spring) 0.85s, border-color 0.25s, background 0.25s; }
+.slide.active .agent-pill:nth-child(10) { transition: opacity 0.4s var(--ease-spring) 0.90s, transform 0.4s var(--ease-spring) 0.90s, border-color 0.25s, background 0.25s; }
 
 .agent-pill:hover {
   border-color: rgba(59,130,246,0.3);
@@ -654,6 +692,12 @@ body {
   width: 22px;
   border-radius: 4px;
   box-shadow: 0 0 8px rgba(59,130,246,0.4);
+  animation: dotPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(59,130,246,0.4); }
+  50% { box-shadow: 0 0 16px rgba(59,130,246,0.7), 0 0 4px rgba(59,130,246,0.3); }
 }
 
 .counter {
@@ -736,18 +780,19 @@ body {
 <body>
 
 <div class="deck" aria-label="Presentation">
+  <canvas class="particle-canvas" id="particles"></canvas>
   <div class="bg-grid"></div>
-  <div class="bg-orbs">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
+  <div class="bg-orbs" id="orbs">
+    <div class="orb orb-1" data-depth="1"></div>
+    <div class="orb orb-2" data-depth="2"></div>
+    <div class="orb orb-3" data-depth="0.5"></div>
   </div>
 
   <!-- Slide 1: Title -->
   <div class="slide active" id="s1">
     <div class="slide-content slide-title-slide">
       <div class="accent-line" style="margin:0 auto 28px"></div>
-      <div class="slide-tag" style="text-align:center">Performlytics × PerformOS</div>
+      <div class="slide-tag" style="text-align:center" id="titleTag"></div>
       <h1 class="slide-title" style="text-align:center">Your Private AI Team.<br><span class="highlight">Running Locally.</span></h1>
       <p class="slide-subtitle" style="text-align:center; margin:0 auto 28px">Ten specialist AI agents. Fully customisable. Running on your hardware with zero data retention. No cloud subscriptions. No API costs.</p>
       <div class="tag-cloud" style="justify-content:center">
@@ -1143,6 +1188,7 @@ function update() {
     d.classList.toggle('active', i === current);
   });
   counter.textContent = (current + 1) + ' / ' + total;
+  triggerCountUp();
 }
 
 function nextSlide() { if (current < total - 1) { current++; update(); } }
@@ -1160,6 +1206,123 @@ document.addEventListener('touchend', e => {
   const diff = touchStartX - e.changedTouches[0].clientX;
   if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
 });
+
+/* ---- Particle Canvas ---- */
+(function() {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
+  const COUNT = 60;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  for (let i = 0; i < COUNT; i++) {
+    particles.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.5 + 0.5,
+      alpha: Math.random() * 0.5 + 0.1
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(59,130,246,${p.alpha})`;
+      ctx.fill();
+    });
+    // Draw connections
+    for (let i = 0; i < COUNT; i++) {
+      for (let j = i + 1; j < COUNT; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(59,130,246,${0.08 * (1 - dist / 150)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ---- Mouse Parallax on Orbs ---- */
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 2;
+  const y = (e.clientY / window.innerHeight - 0.5) * 2;
+  document.querySelectorAll('.orb').forEach(orb => {
+    const depth = parseFloat(orb.dataset.depth) || 1;
+    orb.style.transform = `translate(${x * 15 * depth}px, ${y * 12 * depth}px)`;
+  });
+});
+
+/* ---- Typing Effect on Title Tag ---- */
+(function() {
+  const el = document.getElementById('titleTag');
+  if (!el) return;
+  const text = 'Performlytics x PerformOS';
+  let i = 0;
+  el.style.opacity = '1';
+  el.style.transform = 'translateY(0)';
+  function type() {
+    if (i <= text.length) {
+      el.textContent = text.substring(0, i);
+      i++;
+      setTimeout(type, 50);
+    }
+  }
+  setTimeout(type, 600);
+})();
+
+/* ---- Count-Up Animation on Stats ---- */
+function triggerCountUp() {
+  const activeSlide = document.querySelector('.slide.active');
+  if (!activeSlide) return;
+  activeSlide.querySelectorAll('.stat-val').forEach(el => {
+    if (el.dataset.counted) return;
+    const text = el.textContent.trim();
+    // Extract numeric part
+    const numMatch = text.match(/^[\$]?([\d,]+)/);
+    if (!numMatch) return;
+    const target = parseInt(numMatch[1].replace(/,/g, ''));
+    const prefix = text.startsWith('$') ? '$' : '';
+    const suffix = text.replace(/^[\$]?[\d,]+/, '');
+    const duration = 1200;
+    const start = performance.now();
+    el.dataset.counted = 'true';
+    function animate(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(target * eased);
+      el.textContent = prefix + current.toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  });
+}
+
+// Trigger on first load
+setTimeout(triggerCountUp, 800);
 </script>
 </body>
 </html>
