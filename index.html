@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PerformOS AI Team — Your Private AI Team, Running Locally</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --primary: #0F172A;
+  --accent: #0891B2;
+  --accent-hover: #0E7490;
+  --accent-light: #22D3EE;
+  --secondary: #64748B;
+  --border: #CBD5E1;
+  --border-light: #E2E8F0;
+  --text: #0F172A;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
+  --font-display: Archivo, Calibri, Arial, sans-serif;
+  --font-body: Calibri, Inter, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --radius: 12px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px 100px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(60px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), visibility 0.5s;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.slide.exit-left {
+  transform: translateX(-60px);
+  opacity: 0;
+}
+
+/* Navigation */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: rgba(248, 250, 252, 0.92);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+}
+
+.nav-brand {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s var(--ease);
+}
+
+.nav-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--surface);
+}
+
+.nav-btn:active { transform: scale(0.92); }
+
+.dots {
+  display: flex;
+  gap: 6px;
+  margin: 0 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: all 0.3s var(--ease);
+  cursor: pointer;
+}
+
+.dot.active {
+  background: var(--accent);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.counter {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 48px;
+  text-align: right;
+}
+
+/* Slide types */
+.slide-content {
+  max-width: 960px;
+  width: 100%;
+}
+
+.slide-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4.5vw, 52px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.slide-title .highlight {
+  color: var(--accent);
+}
+
+.slide-subtitle {
+  font-size: clamp(15px, 1.8vw, 20px);
+  color: var(--text-muted);
+  max-width: 680px;
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+
+.slide-body {
+  font-size: 16px;
+  color: var(--secondary);
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+/* Cards */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 860px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all 0.25s var(--ease);
+}
+
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 24px rgba(8, 145, 178, 0.1);
+}
+
+.card-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.card-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Three-col grid */
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Feature list */
+.feature-list {
+  list-style: none;
+  margin-top: 16px;
+  max-width: 720px;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 15px;
+  color: var(--text);
+}
+
+.feature-list li:last-child { border-bottom: none; }
+
+.feature-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+/* Stat row */
+.stats-row {
+  display: flex;
+  gap: 40px;
+  margin-top: 32px;
+  max-width: 720px;
+}
+
+.stat {
+  text-align: left;
+}
+
+.stat-val {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* Price card */
+.price-card {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 32px 40px;
+  max-width: 480px;
+  margin-top: 24px;
+}
+
+.price-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.price-val {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.price-period {
+  font-size: 16px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.price-desc {
+  font-size: 14px;
+  color: var(--secondary);
+  line-height: 1.5;
+  margin-top: 16px;
+}
+
+/* Tag cloud */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+  max-width: 800px;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: all 0.2s var(--ease);
+}
+
+.tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Agent roster */
+.agent-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  max-width: 900px;
+  flex-wrap: wrap;
+}
+
+.agent-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.2s var(--ease);
+}
+
+.agent-pill:hover {
+  border-color: var(--accent);
+  background: rgba(8, 145, 178, 0.04);
+}
+
+.agent-emoji {
+  font-size: 16px;
+}
+
+/* CTA block */
+.cta-block {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: var(--accent);
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: rgba(8, 145, 178, 0.06);
+}
+
+/* Title slide */
+.slide-title-slide {
+  text-align: center;
+  align-items: center;
+}
+
+.slide-title-slide .slide-title {
+  text-align: center;
+  max-width: 800px;
+}
+
+.slide-title-slide .slide-subtitle {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Gradient accent line */
+.accent-line {
+  width: 60px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin-bottom: 24px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .slide { padding: 60px 32px; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .nav-bar { padding: 12px 16px; }
+  .stats-row { gap: 24px; flex-wrap: wrap; }
+}
+
+@media (max-width: 480px) {
+  .grid-3 { grid-template-columns: 1fr; }
+  .agent-row { flex-direction: column; }
+}
+
+/* Scrollbar */
+.slide::-webkit-scrollbar { width: 4px; }
+.slide::-webkit-scrollbar-track { background: transparent; }
+.slide::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* Print */
+@media print {
+  .nav-bar { display: none; }
+  .slide { position: relative; opacity: 1; visibility: visible; transform: none; page-break-after: always; height: auto; min-height: 100vh; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck" aria-label="Presentation">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active" id="s1">
+    <div class="slide-content slide-title-slide">
+      <div class="accent-line" style="margin:0 auto 24px"></div>
+      <div class="slide-tag">PerformOS AI Team</div>
+      <h1 class="slide-title">Your Private AI Team.<br><span class="highlight">Running Locally.</span></h1>
+      <p class="slide-subtitle">Ten specialist AI agents. Zero data leaves your building. No API costs. No cloud subscriptions. Running on your own Mac, powered by local LLMs through Ollama and Hermes.</p>
+      <div class="tag-cloud" style="justify-content:center">
+        <span class="tag">Zero Data Retention</span>
+        <span class="tag">Local Ollama Models</span>
+        <span class="tag">MCP Connected</span>
+        <span class="tag">100% Private</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2: Problem -->
+  <div class="slide" id="s2">
+    <div class="slide-content">
+      <div class="slide-tag">The Problem</div>
+      <h2 class="slide-title">You Would Not Send<br>Your Data to ChatGPT.<br><span class="highlight">So Why Send It<br>to an AI Agent?</span></h2>
+      <ul class="feature-list">
+        <li><span class="feature-bullet"></span>Every cloud AI service reads your data, stores it, and may use it to train their models</li>
+        <li><span class="feature-bullet"></span>Per-seat licensing means you pay more every time you add a team member</li>
+        <li><span class="feature-bullet"></span>Per-token pricing means your bill explodes the moment agents actually get useful work done</li>
+        <li><span class="feature-bullet"></span>You are locked into one provider's ecosystem and their data handling policies</li>
+        <li><span class="feature-bullet"></span>Compliance, legal, and healthcare teams are rightly saying no to cloud AI</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Slide 3: What You Get -->
+  <div class="slide" id="s3">
+    <div class="slide-content">
+      <div class="slide-tag">What You Get</div>
+      <h2 class="slide-title"><span class="highlight">10 Specialist AI Agents</span><br>Fully Configured, Ready to Work</h2>
+      <p class="slide-subtitle">Each agent is a pre-built specialist with its own profile, soul file, tool connections, and domain expertise. They run on local Ollama models through Hermes. No API keys. No cloud.</p>
+      <div class="agent-row">
+        <span class="agent-pill"><span class="agent-emoji">🎯</span> CEO Advisor</span>
+        <span class="agent-pill"><span class="agent-emoji">⚖️</span> HR and Compliance</span>
+        <span class="agent-pill"><span class="agent-emoji">📚</span> Learning Designer</span>
+        <span class="agent-pill"><span class="agent-emoji">🔧</span> Builder and Deployer</span>
+        <span class="agent-pill"><span class="agent-emoji">🔍</span> Research and Synthesis</span>
+        <span class="agent-pill"><span class="agent-emoji">📋</span> Chief of Staff</span>
+        <span class="agent-pill"><span class="agent-emoji">🎭</span> Sales Coach</span>
+        <span class="agent-pill"><span class="agent-emoji">📝</span> Legal Advisor</span>
+        <span class="agent-pill"><span class="agent-emoji">🎓</span> Study Partner</span>
+        <span class="agent-pill"><span class="agent-emoji">📈</span> SEO Strategist</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Agent 1-2 CEO + HR -->
+  <div class="slide" id="s4">
+    <div class="slide-content">
+      <div class="slide-tag">Agents 1 and 2</div>
+      <h2 class="slide-title">Strategy and Compliance<br><span class="highlight">Out of the Box</span></h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-num">01 — CEO Advisor</div>
+          <div class="card-icon">🎯</div>
+          <div class="card-title">Your Thinking Partner, 24/7</div>
+          <div class="card-desc">Board prep, stakeholder pressure-testing, strategic alignment, decision framing. Available at 6am on a Sunday. Never leaves the room.</div>
+        </div>
+        <div class="card">
+          <div class="card-num">02 — HR and Compliance</div>
+          <div class="card-icon">⚖️</div>
+          <div class="card-title">Employment Law, Quoted and Sourced</div>
+          <div class="card-desc">Interprets incidents against actual legislation across 7 APAC markets. Gives you the section number, the quote, and the link. If the answer is "get a lawyer," it tells you exactly what to ask.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Agent 3-4 Build + Learn -->
+  <div class="slide" id="s5">
+    <div class="slide-content">
+      <div class="slide-tag">Agents 3 and 4</div>
+      <h2 class="slide-title">Build and Train<br><span class="highlight">Without the Backlog</span></h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-num">03 — Learning Designer</div>
+          <div class="card-icon">📚</div>
+          <div class="card-title">Full Training Programmes in Hours, Not Weeks</div>
+          <div class="card-desc">Bloom's outcomes, module structures, Tell-Show-Do-Check flows, assessments, Kirkpatrick plans, facilitation guides, learner and manager PDF packs. First draft delivered same day.</div>
+        </div>
+        <div class="card">
+          <div class="card-num">04 — Builder and Deployer</div>
+          <div class="card-icon">🔧</div>
+          <div class="card-title">Dashboards, Automations, Internal Tools</div>
+          <div class="card-desc">"I wish we had a tool for that" backlog cleared. HTML dashboards from Google Sheets. Onboarding checklists. Process automations. Built and deployed, not just scoped.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Agent 5-6 Research + Chief of Staff -->
+  <div class="slide" id="s6">
+    <div class="slide-content">
+      <div class="slide-tag">Agents 5 and 6</div>
+      <h2 class="slide-title">Research and Operations<br><span class="highlight">Never Drown in Documents Again</span></h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-num">05 — Research and Synthesis</div>
+          <div class="card-icon">🔍</div>
+          <div class="card-title">Digests Any Document. Synthesises Any Topic.</div>
+          <div class="card-desc">Feed it 15 research papers or a 300-page report. Get structured synthesis with contradictions, gaps, and implications. Connects to NotebookLM for source-grounded analysis.</div>
+        </div>
+        <div class="card">
+          <div class="card-num">06 — Chief of Staff</div>
+          <div class="card-icon">📋</div>
+          <div class="card-title">Email Triage, Meeting Prep, Follow-Up Tracking</div>
+          <div class="card-desc">Does 60% of what an executive assistant does. Available 24/7. Remembers everything. Prepares you for every meeting with context from the last three.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Agent 7-8 Sales + Legal -->
+  <div class="slide" id="s7">
+    <div class="slide-content">
+      <div class="slide-tag">Agents 7 and 8</div>
+      <h2 class="slide-title">Sales and Legal<br><span class="highlight">Scale What Humans Cannot</span></h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-num">07 — Sales Coach</div>
+          <div class="card-icon">🎭</div>
+          <div class="card-title">AI Roleplay That Actually Feels Real</div>
+          <div class="card-desc">Simulates customer conversations with scored feedback. Progressive difficulty. Before a product launch, after a bad quarter, or for a new hire's first 10 calls. The most effective training method, now scalable.</div>
+        </div>
+        <div class="card">
+          <div class="card-num">08 — Legal Advisor</div>
+          <div class="card-icon">📝</div>
+          <div class="card-title">Contract Review, Risk Flagging, IP and Privacy</div>
+          <div class="card-desc">First pass on every contract in minutes, not days. Flags the clauses that need a lawyer. Explains commercial terms in plain language. Does not give legal advice. Flags issues and recommends next steps.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8: Agent 9-10 Study + SEO -->
+  <div class="slide" id="s8">
+    <div class="slide-content">
+      <div class="slide-tag">Agents 9 and 10</div>
+      <h2 class="slide-title">Development and Growth<br><span class="highlight">Always Available</span></h2>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-num">09 — Study Partner</div>
+          <div class="card-icon">🎓</div>
+          <div class="card-title">MBA, Certifications, Professional Development</div>
+          <div class="card-desc">Course notes, assignment structuring, rubric analysis, study planning. Companies that invest in L&D want people to finish. A study partner that is always available dramatically improves completion rates.</div>
+        </div>
+        <div class="card">
+          <div class="card-num">10 — SEO Strategist</div>
+          <div class="card-icon">📈</div>
+          <div class="card-title">Keyword Research, Content Plans, Audits, Drafts</div>
+          <div class="card-desc">Ongoing SEO work that normally costs $3,000 to $5,000/month in freelancer fees. Audits, briefs, and drafts done. You only pay a human for strategy and final review.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9: Tech Architecture -->
+  <div class="slide" id="s9">
+    <div class="slide-content">
+      <div class="slide-tag">Technical Architecture</div>
+      <h2 class="slide-title"><span class="highlight">Runs on Your Hardware.</span><br>Connects to Your Tools.</h2>
+      <p class="slide-subtitle">Ollama for local inference with Apple Metal GPU acceleration. Hermes for agent orchestration. MCP servers connect to your existing stack. All data stays on-device, encrypted at rest.</p>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-title" style="font-size:15px; margin-bottom:4px;">Hardware Tiers</div>
+          <div class="card-desc" style="font-size:13px;">
+            <strong>Standard:</strong> MacBook Air M5, 24GB — 5 agents, Llama 3.1 8B<br><br>
+            <strong>Professional:</strong> MacBook Pro M5 Pro, 48GB — 10 agents, mixed 8B+14B<br><br>
+            <strong>Enterprise:</strong> Mac Studio M5 Ultra, 128GB — 10+ agents, Phi-4 14B+
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="font-size:15px; margin-bottom:4px;">Integrations via MCP</div>
+          <div class="card-desc" style="font-size:13px;">
+            Gmail, Google Workspace, Slack, Teams, CRM, calendar, internal databases, file system, web search.<br><br>
+            Client provides scoped MCP tokens. Revoke at any time. All agent access terminates in under 60 seconds.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: Pricing -->
+  <div class="slide" id="s10">
+    <div class="slide-content">
+      <div class="slide-tag">Pricing</div>
+      <h2 class="slide-title"><span class="highlight">$4,999</span> AUD/month<br>10 Agents. Unlimited Inference.</h2>
+      <p class="slide-subtitle">No per-token charges. No per-seat licensing. No surprise bills. One flat monthly fee for your entire AI team.</p>
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-val">$3K</div>
+          <div class="stat-label">One-Time Setup</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">$4,999</div>
+          <div class="stat-label">Per Month</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">10</div>
+          <div class="stat-label">Agents Included</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">1 hr</div>
+          <div class="stat-label">Monthly Call</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">3 mo</div>
+          <div class="stat-label">Quarterly Refresh</div>
+        </div>
+      </div>
+      <div style="margin-top:24px; font-size:13px; color:var(--text-muted); padding:16px 20px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); max-width:700px;">
+        Setup includes 10 hours of remote onboarding, agent configuration, MCP integration, team training, and go-live support. 12-month minimum engagement. Additional agents at $500/month each. Ad-hoc optimization at $350/hour beyond included hours.
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 11: The Process -->
+  <div class="slide" id="s11">
+    <div class="slide-content">
+      <div class="slide-tag">The Process</div>
+      <h2 class="slide-title">From Zero to Full<br><span class="highlight">AI Team in 2 Weeks</span></h2>
+      <div class="cards-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="card" style="text-align:center; padding:20px 16px;">
+          <div class="card-num" style="text-align:center">Step 1</div>
+          <div style="font-size:24px; margin:8px 0">📋</div>
+          <div class="card-title" style="font-size:14px">Discovery Call</div>
+          <div class="card-desc" style="font-size:12px">Questionnaire plus 60-minute call to understand your business, priorities, and tool landscape</div>
+        </div>
+        <div class="card" style="text-align:center; padding:20px 16px;">
+          <div class="card-num" style="text-align:center">Step 2</div>
+          <div style="font-size:24px; margin:8px 0">⚙️</div>
+          <div class="card-title" style="font-size:14px">Agent Configuration</div>
+          <div class="card-desc" style="font-size:12px">All 10 agents configured with your context, connected to your tools via MCP</div>
+        </div>
+        <div class="card" style="text-align:center; padding:20px 16px;">
+          <div class="card-num" style="text-align:center">Step 3</div>
+          <div style="font-size:24px; margin:8px 0">🧪</div>
+          <div class="card-title" style="font-size:14px">Integration and Testing</div>
+          <div class="card-desc" style="font-size:12px">End-to-end testing with real data. Approval gates configured. Audit logging active</div>
+        </div>
+        <div class="card" style="text-align:center; padding:20px 16px;">
+          <div class="card-num" style="text-align:center">Step 4</div>
+          <div style="font-size:24px; margin:8px 0">🚀</div>
+          <div class="card-title" style="font-size:14px">Go-Live and Handover</div>
+          <div class="card-desc" style="font-size:12px">Team training, documentation, and first month of optimization calls included</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 12: Customizer -->
+  <div class="slide" id="s12">
+    <div class="slide-content" style="text-align:center; align-items:center;">
+      <div class="accent-line" style="margin:0 auto 24px"></div>
+      <div class="slide-tag" style="text-align:center">The Differentiator</div>
+      <h2 class="slide-title" style="text-align:center">Customizable.<br><span class="highlight">Not Just Configurable.</span></h2>
+      <p class="slide-subtitle" style="text-align:center; margin:0 auto 32px">Every agent starts with deep domain expertise. But during your 4 hours of discovery in the onboarding call, we do not just flip switches. We learn how your business actually works, what your team cares about, what decisions keep you up at night. Then we customise every agent to match.</p>
+      <div class="stats-row" style="justify-content:center">
+        <div class="stat" style="text-align:center">
+          <div class="stat-val">4 hrs</div>
+          <div class="stat-label">Deep Discovery</div>
+        </div>
+        <div class="stat" style="text-align:center">
+          <div class="stat-val">Your Voice</div>
+          <div class="stat-label">Agent Tone Match</div>
+        </div>
+        <div class="stat" style="text-align:center">
+          <div class="stat-val">Your Data</div>
+          <div class="stat-label">Knowledge Bases</div>
+        </div>
+        <div class="stat" style="text-align:center">
+          <div class="stat-val">Your Workflows</div>
+          <div class="stat-label">Built In</div>
+        </div>
+      </div>
+      <p class="slide-body" style="text-align:center; margin:24px auto 0; font-style:italic; max-width:600px;">"You do not get a template. You get a team that knows your business."</p>
+    </div>
+  </div>
+
+  <!-- Slide 13: Zero Data -->
+  <div class="slide" id="s13">
+    <div class="slide-content">
+      <div class="slide-tag">Zero Data Retention</div>
+      <h2 class="slide-title"><span class="highlight">Six Commitments</span><br>That Protect Your Business</h2>
+      <ul class="feature-list">
+        <li><span class="feature-bullet"></span><strong>No model training</strong> — Your data is never used to train, fine-tune, or improve any AI model</li>
+        <li><span class="feature-bullet"></span><strong>Local session logs</strong> — All conversation history stored only on your own infrastructure</li>
+        <li><span class="feature-bullet"></span><strong>Client-owned tokens</strong> — You generate and own all MCP tokens. Revoke at any time</li>
+        <li><span class="feature-bullet"></span><strong>Data residency</strong> — All processing occurs on your hardware, in your building, under your control</li>
+        <li><span class="feature-bullet"></span><strong>Right to deletion</strong> — Request complete deletion of agent configurations and stored data at any time</li>
+        <li><span class="feature-bullet"></span><strong>Sub-processor transparency</strong> — Your data never passes through any third-party server</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Slide 14: CTA -->
+  <div class="slide" id="s14">
+    <div class="slide-content slide-title-slide">
+      <div class="accent-line" style="margin:0 auto 24px"></div>
+      <div class="slide-tag" style="text-align:center">Ready?</div>
+      <h1 class="slide-title" style="text-align:center">Build Your<br><span class="highlight">AI Team.</span></h1>
+      <p class="slide-subtitle" style="text-align:center">30-minute discovery call. No pitch. Just understanding your business and showing you what is possible.</p>
+      <div class="cta-block" style="justify-content:center">
+        <a href="#" class="btn-primary">Book a Discovery Call →</a>
+        <a href="#" class="btn-secondary">Download the Spec</a>
+      </div>
+      <div style="margin-top:40px; font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-light);">
+        PerformOS AI Team — Local Edition — Zero Data Retention
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <div class="nav-brand">PerformOS AI Team</div>
+  <div class="nav-center">
+    <button class="nav-btn" onclick="prevSlide()" aria-label="Previous slide">←</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn" onclick="nextSlide()" aria-label="Next slide">→</button>
+  </div>
+  <div class="counter" id="counter">1 / 14</div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.getElementById('dots');
+const counter = document.getElementById('counter');
+let current = 0;
+const total = slides.length;
+
+// Build dots
+slides.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goTo(i);
+  dotsContainer.appendChild(dot);
+});
+
+function update() {
+  slides.forEach((s, i) => {
+    s.classList.remove('active', 'exit-left');
+    if (i === current) s.classList.add('active');
+    else if (i < current) s.classList.add('exit-left');
+  });
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+  });
+  counter.textContent = (current + 1) + ' / ' + total;
+}
+
+function nextSlide() { if (current < total - 1) { current++; update(); } }
+function prevSlide() { if (current > 0) { current--; update(); } }
+function goTo(i) { current = i; update(); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+});
+
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
+});
+</script>
+</body>
+</html>
